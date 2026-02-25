@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grand Rapids Therapist Crisis Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --teal-50:  #f0fdfa; --teal-100: #ccfbf1;
+            --teal-400: #2dd4bf; --teal-500: #14b8a6;
+            --teal-600: #0d9488; --teal-700: #0f766e; --teal-900: #134e4a;
+            --orange-50: #fff7ed; --orange-200: #fed7aa;
+            --orange-500: #f97316; --orange-800: #9a3412; --orange-900: #7c2d12;
+            --red-50: #fef2f2; --red-100: #fee2e2;
+            --red-500: #ef4444; --red-600: #dc2626; --red-700: #b91c1c; --red-900: #7f1d1d;
+            --blue-50: #eff6ff; --blue-600: #2563eb;
+            --green-50: #f0fdf4; --green-100: #dcfce7;
+            --green-600: #16a34a; --green-700: #15803d;
+            --amber-50: #fffbeb; --amber-200: #fde68a;
+            --amber-500: #f59e0b; --amber-800: #92400e; --amber-900: #78350f;
+            --slate-50: #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1; --slate-400: #94a3b8; --slate-500: #64748b;
+            --slate-600: #475569; --slate-700: #334155;
+            --slate-800: #1e293b; --slate-900: #0f172a;
+        }
+
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--slate-50); color: var(--slate-900); font-size: 14px; line-height: 1.5; }
+        a { text-decoration: none; }
+        button { cursor: pointer; font-family: inherit; border: none; background: none; }
+
+        .container { max-width: 72rem; margin: 0 auto; padding: 0 1rem; }
+
+        /* NAV */
+        nav { background: var(--slate-900); color: white; position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--slate-800); box-shadow: 0 4px 24px rgba(0,0,0,.3); }
+        .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: .75rem; height: 4rem; }
+        .nav-brand { display: flex; align-items: center; gap: .75rem; cursor: pointer; flex-shrink: 0; }
+        .nav-logo { width: 2.25rem; height: 2.25rem; background: var(--teal-500); border-radius: .75rem; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: .75rem; color: white; }
+        .nav-title { font-weight: 800; font-size: .7rem; text-transform: uppercase; letter-spacing: .05em; }
+        .nav-subtitle { font-size: .6rem; color: var(--teal-400); font-weight: 700; text-transform: uppercase; letter-spacing: .15em; margin-top: .2rem; }
+        .nav-brand-text { display: none; }
+        @media (min-width: 480px) { .nav-brand-text { display: block; } }
+        .nav-actions { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; justify-content: flex-end; }
+
+        /* DROPDOWNS */
+        .dropdown-group { position: relative; display: flex; align-items: center; }
+        .dropdown-trigger { display: flex; align-items: center; gap: .375rem; font-size: .7rem; font-weight: 700; background: var(--slate-800); color: white; padding: .5rem .75rem; border-radius: .5rem; border: 1px solid var(--slate-700); transition: background .15s; white-space: nowrap; }
+        .dropdown-trigger:hover { background: var(--slate-700); }
+        .dropdown-menu { display: none; position: absolute; top: 100%; right: 0; padding-top: 6px; z-index: 100; min-width: 220px; }
+        .dropdown-menu.open { display: block; }
+        .dropdown-menu-inner { background: white; box-shadow: 0 20px 40px rgba(0,0,0,.15); border-radius: 1rem; border: 1px solid var(--slate-200); overflow: hidden; }
+        .dropdown-header { padding: .5rem 1rem; background: var(--slate-50); font-size: .6rem; font-weight: 900; color: var(--slate-400); text-transform: uppercase; letter-spacing: .15em; border-bottom: 1px solid var(--slate-200); }
+        .dropdown-item { display: block; width: 100%; text-align: left; padding: .75rem 1rem; font-size: .7rem; font-weight: 700; color: var(--slate-700); border-bottom: 1px solid var(--slate-100); transition: background .1s; }
+        .dropdown-item:last-child { border-bottom: none; }
+        .dropdown-item:hover { background: var(--slate-50); }
+        .dropdown-item.teal:hover { background: var(--teal-50); color: var(--teal-700); }
+        .dropdown-item.red:hover  { background: var(--red-50);  color: var(--red-600);  }
+        .dropdown-item.blue:hover { background: var(--blue-50); color: var(--blue-600); }
+        .dropdown-item.orange:hover { background: var(--orange-50); color: var(--orange-800); }
+        .btn-resources { display: flex; align-items: center; gap: .375rem; font-size: .7rem; font-weight: 700; color: var(--teal-400); padding: .5rem .75rem; border-radius: .5rem; border: 1px solid rgba(20,184,166,.3); background: rgba(20,184,166,.08); transition: background .15s; white-space: nowrap; }
+        .btn-resources:hover { background: rgba(20,184,166,.15); }
+
+        /* VIEWS */
+        .view-section { display: none; padding: 2rem 0 3rem; animation: fadeIn .3s ease-out; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* SECTION HEADER */
+        .section-header { margin-bottom: 2rem; }
+        .section-header h2 { font-size: 2rem; font-weight: 900; letter-spacing: -.03em; line-height: 1.1; }
+        .section-header-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-top: .25rem; }
+        .section-header p { color: var(--slate-500); font-size: .85rem; }
+        .link-ref { font-size: .7rem; font-weight: 700; color: var(--teal-600); }
+        .link-ref:hover { text-decoration: underline; }
+
+        /* GRIDS */
+        .assessment-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        .grid-2col { display: grid; grid-template-columns: 1fr; gap: .75rem; }
+        .grid-2col-sm { display: grid; grid-template-columns: 1fr; gap: .5rem; }
+        @media (min-width: 640px) { .grid-2col { grid-template-columns: 1fr 1fr; } .grid-2col-sm { grid-template-columns: 1fr 1fr; } }
+        @media (min-width: 1024px) { .assessment-grid { grid-template-columns: 7fr 5fr; gap: 2.5rem; } }
+
+        /* CARDS */
+        .card { background: white; border-radius: 1.25rem; border: 1px solid var(--slate-100); box-shadow: 0 1px 4px rgba(0,0,0,.05); overflow: hidden; }
+        .card-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--slate-100); background: var(--slate-50); }
+        .card-header h3 { font-size: .65rem; font-weight: 900; color: var(--slate-500); text-transform: uppercase; letter-spacing: .15em; }
+        .card-header p  { font-size: .65rem; color: var(--slate-400); margin-top: .2rem; }
+        .card-header.green { background: var(--green-50); }
+        .card-header.green h3 { color: var(--green-700); }
+        .card-header.green p  { color: var(--green-600); }
+        .card-body { padding: 1rem; }
+
+        /* RISK BUTTONS */
+        .risk-btn { display: flex; align-items: center; justify-content: space-between; gap: .75rem; width: 100%; padding: 1rem; text-align: left; background: var(--slate-50); border-radius: .75rem; border: 1px solid var(--slate-100); transition: border-color .15s, background .15s; margin-bottom: .5rem; }
+        .risk-btn:last-child { margin-bottom: 0; }
+        .risk-btn:hover { border-color: var(--slate-300); }
+        .risk-btn.checked { background: var(--teal-50); border-color: var(--teal-600); }
+        .item-title { font-size: .85rem; font-weight: 700; color: var(--slate-800); }
+        .item-desc  { font-size: .7rem; color: var(--slate-500); margin-top: .2rem; }
+        .high-flag  { font-weight: 700; color: var(--red-500); }
+        .check-indicator { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--slate-300); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all .15s; font-size: 12px; font-weight: 900; color: transparent; }
+        .risk-btn.checked .check-indicator { background: var(--teal-600); border-color: var(--teal-600); color: white; }
+
+        .protective-btn { display: flex; align-items: center; gap: .75rem; width: 100%; padding: .75rem; text-align: left; background: var(--slate-50); border-radius: .75rem; border: 1px solid var(--slate-100); transition: border-color .15s, background .15s; margin-bottom: .5rem; }
+        .protective-btn:last-child { margin-bottom: 0; }
+        .protective-btn:hover { border-color: #86efac; }
+        .protective-btn.checked { background: var(--green-50); border-color: var(--green-600); }
+        .protective-btn.checked .check-indicator { background: var(--green-600); border-color: var(--green-600); color: white; }
+        .protective-btn .item-title { font-size: .75rem; font-weight: 600; color: var(--slate-700); }
+
+        /* RIGHT COLUMN */
+        .right-col { display: flex; flex-direction: column; gap: 1.25rem; }
+        .risk-card { background: var(--slate-900); border-radius: 1.25rem; padding: 1.75rem; color: white; transition: box-shadow .3s; }
+        .risk-card-lbl { font-size: .6rem; font-weight: 900; color: var(--slate-400); text-transform: uppercase; letter-spacing: .2em; }
+        .risk-card-row { display: flex; align-items: center; gap: .75rem; margin-top: .5rem; }
+        .risk-dot { width: 1rem; height: 1rem; border-radius: 50%; flex-shrink: 0; background: var(--teal-400); transition: background .3s; }
+        .risk-level { font-size: 1.75rem; font-weight: 900; color: var(--teal-400); transition: color .3s; }
+        .risk-desc  { font-size: .7rem; color: var(--slate-400); margin-top: .5rem; line-height: 1.6; }
+        .ring-orange { box-shadow: 0 0 0 2px rgba(251,146,60,.4); }
+        .ring-red    { box-shadow: 0 0 0 2px rgba(248,113,113,.4); }
+
+        .prot-summary { background: var(--green-50); border: 1px solid var(--green-100); border-radius: 1.25rem; padding: 1.25rem; }
+        .prot-summary-lbl { font-size: .6rem; font-weight: 900; color: var(--green-700); text-transform: uppercase; letter-spacing: .15em; }
+        .prot-count { font-size: 1.5rem; font-weight: 900; color: var(--green-700); margin-top: .25rem; }
+        .prot-count span { font-size: .85rem; font-weight: 400; color: var(--green-600); }
+        .prot-note  { font-size: .65rem; color: var(--green-600); margin-top: .25rem; line-height: 1.5; }
+
+        .willingness-card { background: white; border-radius: 1.25rem; padding: 1.25rem; border: 1px solid var(--slate-100); box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+        .willingness-lbl  { font-size: .6rem; font-weight: 900; color: var(--slate-400); text-transform: uppercase; letter-spacing: .15em; display: block; margin-bottom: .75rem; }
+        .toggle-row { display: flex; align-items: center; gap: 1rem; }
+        .toggle-track { width: 3.5rem; height: 1.75rem; background: var(--teal-500); border-radius: 9999px; padding: .2rem; display: flex; align-items: center; cursor: pointer; border: none; transition: background .2s; flex-shrink: 0; }
+        .toggle-track.off { background: var(--slate-300); }
+        .toggle-dot { width: 1.35rem; height: 1.35rem; background: white; border-radius: 50%; box-shadow: 0 1px 4px rgba(0,0,0,.2); transform: translateX(1.75rem); transition: transform .25s ease; }
+        .toggle-dot.off { transform: translateX(0); }
+        .toggle-yes { font-size: .85rem; font-weight: 700; color: var(--teal-500); }
+        .toggle-no  { font-size: .85rem; font-weight: 700; color: var(--slate-400); }
+        .toggle-yes.dim { color: var(--slate-400); }
+        .toggle-no.lit  { color: var(--red-500); }
+        .willingness-hint { font-size: .65rem; color: var(--slate-400); margin-top: .75rem; line-height: 1.5; }
+
+        .btn-route { width: 100%; padding: 1rem; background: var(--slate-900); color: white; font-weight: 800; font-size: .85rem; border-radius: 1.25rem; box-shadow: 0 4px 12px rgba(0,0,0,.2); transition: background .15s; }
+        .btn-route:hover { background: var(--slate-800); }
+
+        .scoring-ref { background: white; border-radius: 1.25rem; padding: 1.25rem; border: 1px solid var(--slate-100); box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+        .scoring-lbl  { font-size: .6rem; font-weight: 900; color: var(--slate-400); text-transform: uppercase; letter-spacing: .15em; margin-bottom: .75rem; }
+        .score-row { display: flex; align-items: center; gap: .5rem; font-size: .65rem; color: var(--slate-600); margin-bottom: .4rem; }
+        .sdot { width: .625rem; height: .625rem; border-radius: 50%; flex-shrink: 0; }
+        .sdot.low  { background: var(--teal-400); }
+        .sdot.mod  { background: var(--orange-400, #fb923c); }
+        .sdot.high { background: var(--red-500); }
+        .scoring-note { border-top: 1px solid var(--slate-100); padding-top: .5rem; margin-top: .5rem; font-size: .6rem; color: var(--slate-400); line-height: 1.5; }
+
+        /* SCENARIO */
+        .back-link { font-size: .85rem; font-weight: 700; color: var(--slate-500); display: inline-block; margin-bottom: 1.5rem; cursor: pointer; }
+        .back-link:hover { color: var(--teal-600); }
+        .scenario-card { background: white; border-radius: 1.25rem; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,.08); border: 1px solid var(--slate-100); }
+        .scenario-card.teal { border-bottom: 4px solid var(--teal-500); }
+        .scenario-card.blue { border-bottom: 4px solid var(--blue-600); }
+        .scenario-card.red  { border-bottom: 4px solid var(--red-600); }
+        .scenario-hdr { padding: 2rem; color: white; }
+        .bg-teal { background: var(--teal-500); }
+        .bg-blue { background: var(--blue-600); }
+        .bg-red  { background: var(--red-600); }
+        .scenario-badge { display: inline-block; background: rgba(255,255,255,.2); font-size: .6rem; font-weight: 900; text-transform: uppercase; letter-spacing: .15em; padding: .2rem .75rem; border-radius: 9999px; }
+        .scenario-title    { font-size: 2rem; font-weight: 900; letter-spacing: -.03em; margin-top: .75rem; }
+        .scenario-subtitle { font-size: .8rem; margin-top: .25rem; opacity: .85; }
+        .scenario-body { padding: 1.5rem; }
+        @media (min-width: 768px) { .scenario-body { padding: 2.5rem; } }
+        .s-space > * + * { margin-top: 2rem; }
+
+        /* INFO BOXES */
+        .ibox { border-radius: 1.25rem; padding: 1.25rem; }
+        .ibox.teal   { background: var(--teal-50);   border: 1px solid var(--teal-100); }
+        .ibox.orange { background: var(--orange-50);  border: 2px solid var(--orange-200); }
+        .ibox.slate  { background: var(--slate-50);   border: 1px solid var(--slate-200); }
+        .ibox.dark   { background: var(--slate-900); }
+        .ibox.amber  { background: var(--amber-50);   border: 1px solid var(--amber-200); }
+        .ibox.red-lt { background: var(--red-50);     border: 1px solid var(--red-100); }
+        .ibox-icon-row { display: flex; align-items: flex-start; gap: .75rem; }
+        .ibox-icon { width: 2.25rem; height: 2.25rem; border-radius: .75rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; }
+        .ibox-icon.orange { background: var(--orange-500); color: white; }
+        .ibox-icon.amber  { background: var(--amber-500);  color: white; }
+        .ibox-ttl { font-size: .65rem; font-weight: 900; text-transform: uppercase; letter-spacing: .1em; margin-bottom: .35rem; }
+        .ibox-ttl.orange { color: var(--orange-900); }
+        .ibox-ttl.amber  { color: var(--amber-900);  }
+        .ibox-ttl.red    { color: var(--red-600);    }
+        .ibox-ttl.teal   { color: var(--teal-700);   }
+        .ibox-text { font-size: .8rem; line-height: 1.6; }
+        .ibox-text.orange { color: var(--orange-800); }
+        .ibox-text.teal   { color: var(--teal-900);   }
+
+        .sub-title { font-size: 1rem; font-weight: 900; color: var(--slate-800); margin-bottom: .75rem; }
+
+        /* SCRIPTS */
+        .script-block { background: var(--slate-50); border-radius: 1.25rem; border: 1px solid var(--slate-200); padding: 1.25rem; }
+        .script-lbl { font-size: .6rem; font-weight: 900; text-transform: uppercase; letter-spacing: .1em; margin-bottom: .5rem; }
+        .script-lbl.red   { color: var(--red-600); }
+        .script-lbl.slate { color: var(--slate-500); }
+        .script-text  { font-size: .8rem; color: var(--slate-700); line-height: 1.7; font-style: italic; }
+        .script-text.sm { font-size: .7rem; color: var(--slate-600); }
+
+        /* FACILITIES */
+        .facility-grid { display: grid; grid-template-columns: 1fr; gap: .75rem; }
+        @media (min-width: 480px)  { .facility-grid { grid-template-columns: 1fr 1fr; } }
+        @media (min-width: 1024px) { .facility-grid { grid-template-columns: repeat(4, 1fr); } }
+        .facility-card { background: white; border-radius: 1.25rem; border: 1px solid var(--slate-200); padding: 1rem; }
+        .fac-name { font-weight: 900; font-size: 1rem; color: var(--slate-800); }
+        .fac-addr { font-size: .6rem; font-weight: 700; color: var(--slate-400); margin-top: .2rem; }
+        .fac-type { font-size: .6rem; font-weight: 700; color: var(--blue-600); margin-top: .15rem; }
+        .fac-actions { display: flex; gap: .375rem; margin-top: .75rem; }
+        .btn-call { flex: 1; background: var(--blue-600); color: white; text-align: center; padding: .5rem; border-radius: .5rem; font-weight: 700; font-size: .65rem; }
+        .btn-call:hover { opacity: .9; }
+        .btn-map { width: 2rem; height: 2rem; background: var(--slate-100); display: flex; align-items: center; justify-content: center; border-radius: .5rem; font-size: .75rem; }
+        .btn-map:hover { background: var(--slate-200); }
+
+        /* STEPS */
+        .step { position: relative; padding-left: 3rem; }
+        .step + .step { margin-top: 2rem; }
+        .step-num { position: absolute; left: 0; top: 0; width: 2rem; height: 2rem; background: var(--red-600); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: .8rem; }
+        .step-title { font-size: 1.1rem; font-weight: 900; color: var(--slate-800); margin-bottom: .5rem; }
+
+        /* SCENARIO INNER GRID */
+        .scen-inner { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+        @media (min-width: 1024px) { .scen-inner { grid-template-columns: 2fr 1fr; gap: 2.5rem; } }
+        .scen-side > * + * { margin-top: 1.25rem; }
+
+        /* CHECKLIST */
+        .checklist { list-style: none; }
+        .checklist li { display: flex; gap: .5rem; font-size: .7rem; color: var(--slate-300); padding-bottom: .6rem; border-bottom: 1px solid rgba(255,255,255,.1); margin-bottom: .6rem; }
+        .checklist li:last-child { border-bottom: none; margin-bottom: 0; }
+        .ck { color: var(--teal-400); flex-shrink: 0; }
+
+        /* DOC LISTS */
+        .doc-list { list-style: none; margin-top: .5rem; }
+        .doc-list li { font-size: .8rem; color: var(--amber-900); line-height: 1.6; padding-bottom: .35rem; }
+        .doc-list li.bold { font-weight: 700; color: var(--amber-800); }
+
+        /* DIRECTORY */
+        .dir-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 1rem; margin-bottom: 2rem; }
+        .dir-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+        @media (min-width: 480px)  { .dir-grid { grid-template-columns: 1fr 1fr; } }
+        @media (min-width: 1024px) { .dir-grid { grid-template-columns: repeat(3, 1fr); } }
+        .res-card { background: white; border-radius: 1.25rem; border: 1px solid var(--slate-100); padding: 1.5rem; display: flex; flex-direction: column; box-shadow: 0 1px 4px rgba(0,0,0,.04); }
+        .res-card.dark { background: var(--teal-900); }
+        .res-name { font-size: 1.25rem; font-weight: 900; color: var(--slate-900); }
+        .res-card.dark .res-name { color: white; }
+        .res-type { font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .15em; color: var(--slate-400); margin-top: .25rem; }
+        .res-card.dark .res-type { color: var(--teal-400); }
+        .res-actions { display: flex; gap: .5rem; margin-top: 1.5rem; }
+        .btn-rcall { flex: 1; background: var(--slate-900); color: white; text-align: center; padding: .75rem; border-radius: .75rem; font-weight: 700; font-size: .85rem; }
+        .res-card.dark .btn-rcall { background: var(--teal-500); }
+        .btn-rcall:hover { opacity: .9; }
+        .btn-rmap { width: 3rem; height: 3rem; background: var(--slate-100); display: flex; align-items: center; justify-content: center; border-radius: .75rem; font-size: 1.1rem; }
+        .btn-rmap:hover { background: var(--slate-200); }
+        .back-btn { font-size: .85rem; font-weight: 700; color: var(--teal-600); cursor: pointer; }
+        .back-btn:hover { text-decoration: underline; }
+
+        footer { border-top: 1px solid var(--slate-200); padding: 2rem 0; margin-top: 3rem; text-align: center; }
+        footer p { font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .2em; color: var(--slate-400); }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="container nav-inner">
+        <div class="nav-brand" onclick="switchView('assessment')">
+            <div class="nav-logo">GR</div>
+            <div class="nav-brand-text">
+                <div class="nav-title">Crisis Portal</div>
+                <div class="nav-subtitle">Kent County Clinical Hub</div>
+            </div>
+        </div>
+        <div class="nav-actions">
+            <div class="dropdown-group">
+                <button class="dropdown-trigger">Jump to Scenario <span style="font-size:.55rem;opacity:.5;">▼</span></button>
+                <div class="dropdown-menu">
+                    <div class="dropdown-menu-inner">
+                        <div class="dropdown-header">Protocols</div>
+                        <button onclick="manualScenario('A')" class="dropdown-item teal">Scenario A: Monitoring</button>
+                        <button onclick="manualScenario('B')" class="dropdown-item blue">Scenario B: Voluntary Escalation</button>
+                        <button onclick="manualScenario('C')" class="dropdown-item red">Scenario C: Involuntary Escalation</button>
+                    </div>
+                </div>
+            </div>
+            <div class="dropdown-group">
+                <button class="dropdown-trigger">Forms <span style="font-size:.55rem;opacity:.5;">▼</span></button>
+                <div class="dropdown-menu">
+                    <div class="dropdown-menu-inner">
+                        <div class="dropdown-header">Legal &amp; Clinical</div>
+                        <a href="https://www.courts.michigan.gov/siteassets/forms/scao-approved/pcm201.pdf" target="_blank" class="dropdown-item red">📄 PCM 201 (Petition)</a>
+                        <a href="https://www.courts.michigan.gov/siteassets/forms/scao-approved/mc97.pdf" target="_blank" class="dropdown-item red">📄 MC 97 (PII Privacy)</a>
+                        <a href="https://cssrs.columbia.edu/wp-content/uploads/C-SSRS_Pediatric-SLC_11.1.16.pdf" target="_blank" class="dropdown-item teal">📄 Official C-SSRS Scale</a>
+                        <a href="https://suicidepreventionlifeline.org/wp-content/uploads/2016/08/Brown_StanleySafetyPlanTemplate.pdf" target="_blank" class="dropdown-item orange">📄 Safety Plan Template</a>
+                    </div>
+                </div>
+            </div>
+            <button onclick="switchView('directory')" class="btn-resources">📍 Resources</button>
+        </div>
+    </div>
+</nav>
+
+<!-- ASSESSMENT -->
+<section id="view-assessment" class="view-section active">
+    <div class="container">
+        <div class="section-header">
+            <h2>Risk Assessment</h2>
+            <div class="section-header-meta">
+                <p>C-SSRS guided screening. Complete all items before routing to a scenario.</p>
+                <a href="https://cssrs.columbia.edu/the-columbia-scale-c-ssrs/about-the-scale/" target="_blank" class="link-ref">🔗 Full C-SSRS Reference</a>
+            </div>
+        </div>
+        <div class="assessment-grid">
+
+            <!-- Left column -->
+            <div>
+                <div class="card" style="margin-bottom:1.5rem;">
+                    <div class="card-header">
+                        <h3>C-SSRS: Suicidal Ideation</h3>
+                        <p>Items 1–5 reflect the C-SSRS ideation severity continuum. Check all that apply.</p>
+                    </div>
+                    <div class="card-body">
+                        <button onclick="toggleRisk(this)" class="risk-btn" data-weight="1">
+                            <div><div class="item-title">1. Passive Ideation</div><div class="item-desc">Wishes to be dead or not alive; no thought of killing self.</div></div>
+                            <div class="check-indicator">✓</div>
+                        </button>
+                        <button onclick="toggleRisk(this)" class="risk-btn" data-weight="1">
+                            <div><div class="item-title">2. Active Ideation (Non-specific)</div><div class="item-desc">Thoughts of killing self; no method, plan, or intent identified.</div></div>
+                            <div class="check-indicator">✓</div>
+                        </button>
+                        <button onclick="toggleRisk(this)" class="risk-btn" data-weight="3">
+                            <div><div class="item-title">3. Active Ideation with Method</div><div class="item-desc">Has thought about how; no plan or intent to act.</div></div>
+                            <div class="check-indicator">✓</div>
+                        </button>
+                        <button onclick="toggleRisk(this)" class="risk-btn" data-weight="6">
+                            <div><div class="item-title">4. Active Ideation with Intent</div><div class="item-desc">Some intention of acting on thoughts; no specific plan. <span class="high-flag">High risk alone.</span></div></div>
+                            <div class="check-indicator">✓</div>
+                        </button>
+                        <button onclick="toggleRisk(this)" class="risk-btn" data-weight="6">
+                            <div><div class="item-title">5. Active Ideation with Plan &amp; Intent</div><div class="item-desc">Has worked out details; intends to carry out the plan. <span class="high-flag">High risk alone.</span></div></div>
+                            <div class="check-indicator">✓</div>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom:1.5rem;">
+                    <div class="card-header">
+                        <h3>C-SSRS: Behavior &amp; Clinical Risk Factors</h3>
+                        <p>Behavioral history and means access are independent predictors of lethality.</p>
+                    </div>
+                    <div class="card-body">
+                        <button onclick="toggleRisk(this)" class="risk-btn" data-weight="2">
+                            <div><div class="item-title">6. Past Suicidal Behavior</div><div class="item-desc">Prior attempt(s), aborted/interrupted attempt, or preparatory acts (acquired means, wrote note).</div></div>
+                            <div class="check-indicator">✓</div>
+                        </button>
+                        <button onclick="toggleRisk(this)" class="risk-btn" data-weight="2">
+                            <div><div class="item-title">7. Access to Lethal Means</div><div class="item-desc">Has access to identified method (firearm, medication stockpile, etc.).</div></div>
+                            <div class="check-indicator">✓</div>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header green">
+                        <h3>Protective Factors</h3>
+                        <p>Check all that apply. Weigh alongside risk factors in overall clinical formulation.</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="grid-2col-sm">
+                            <button onclick="toggleProtective(this)" class="protective-btn"><div class="check-indicator" style="border-color:var(--slate-300);">✓</div><span class="item-title">Reasons for living identified</span></button>
+                            <button onclick="toggleProtective(this)" class="protective-btn"><div class="check-indicator" style="border-color:var(--slate-300);">✓</div><span class="item-title">Social support present</span></button>
+                            <button onclick="toggleProtective(this)" class="protective-btn"><div class="check-indicator" style="border-color:var(--slate-300);">✓</div><span class="item-title">Future orientation / goals</span></button>
+                            <button onclick="toggleProtective(this)" class="protective-btn"><div class="check-indicator" style="border-color:var(--slate-300);">✓</div><span class="item-title">Engaged in treatment</span></button>
+                            <button onclick="toggleProtective(this)" class="protective-btn"><div class="check-indicator" style="border-color:var(--slate-300);">✓</div><span class="item-title">Responsibility for dependents</span></button>
+                            <button onclick="toggleProtective(this)" class="protective-btn"><div class="check-indicator" style="border-color:var(--slate-300);">✓</div><span class="item-title">Moral/religious objections</span></button>
+                            <button onclick="toggleProtective(this)" class="protective-btn"><div class="check-indicator" style="border-color:var(--slate-300);">✓</div><span class="item-title">No prior attempts</span></button>
+                            <button onclick="toggleProtective(this)" class="protective-btn"><div class="check-indicator" style="border-color:var(--slate-300);">✓</div><span class="item-title">Fear of death / dying</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right column -->
+            <div class="right-col">
+                <div id="risk-card" class="risk-card">
+                    <div class="risk-card-lbl">Assessed Risk Level</div>
+                    <div class="risk-card-row">
+                        <div id="risk-dot" class="risk-dot"></div>
+                        <div id="risk-label" class="risk-level">LOW RISK</div>
+                    </div>
+                    <p id="risk-description" class="risk-desc">Passive ideation only or no significant risk factors identified. Outpatient management with enhanced monitoring may be appropriate.</p>
+                </div>
+
+                <div class="prot-summary">
+                    <div class="prot-summary-lbl">Protective Factors Noted</div>
+                    <div class="prot-count" id="protective-count">0 <span>of 8</span></div>
+                    <p class="prot-note">Multiple protective factors may moderate overall risk. Consider alongside C-SSRS findings in your formulation.</p>
+                </div>
+
+                <div class="willingness-card">
+                    <span class="willingness-lbl">Patient Willing for Voluntary Care?</span>
+                    <div class="toggle-row">
+                        <span id="label-unwilling" class="toggle-no">No</span>
+                        <button id="willing-toggle" class="toggle-track" onclick="toggleWillingness()">
+                            <div id="willing-dot" class="toggle-dot"></div>
+                        </button>
+                        <span id="label-willing" class="toggle-yes">Yes</span>
+                    </div>
+                    <p class="willingness-hint">Relevant for high-risk routing: willing → Scenario B, unwilling → Scenario C.</p>
+                </div>
+
+                <button onclick="autoScenario()" class="btn-route">Route to Protocol ➜</button>
+
+                <div class="scoring-ref">
+                    <div class="scoring-lbl">C-SSRS Scoring Reference</div>
+                    <div class="score-row"><div class="sdot low"></div><span><strong>Low (0–2):</strong> Passive or non-specific ideation only</span></div>
+                    <div class="score-row"><div class="sdot mod"></div><span><strong>Moderate (3–5):</strong> Active ideation with identified method</span></div>
+                    <div class="score-row"><div class="sdot high"></div><span><strong>High (6+):</strong> Intent, specific plan, or prior behavior present</span></div>
+                    <div class="scoring-note">Items 4 and 5 (intent/plan) are independently HIGH risk. Protective factors and clinical judgment always inform the final formulation.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SCENARIOS -->
+<section id="view-scenarios" class="view-section">
+    <div class="container">
+        <span class="back-link" onclick="switchView('assessment')">← Back to Assessment</span>
+        <div id="scenario-content"></div>
+    </div>
+</section>
+
+<!-- DIRECTORY -->
+<section id="view-directory" class="view-section">
+    <div class="container">
+        <div class="dir-header">
+            <div>
+                <h2 style="font-size:2rem;font-weight:900;letter-spacing:-.03em;">Resource Directory</h2>
+                <p style="color:var(--slate-500);margin-top:.25rem;font-size:.85rem;">Verified Grand Rapids facilities for emergency support.</p>
+            </div>
+            <span class="back-btn" onclick="switchView('assessment')">← Back</span>
+        </div>
+        <div class="dir-grid">
+            <div class="res-card"><div class="res-name">Network 180</div><div class="res-type">Kent County CMH · 790 Fuller Ave NE</div><div class="res-actions"><a href="tel:6163363909" class="btn-rcall">616-336-3909</a><a href="https://www.google.com/maps/search/?api=1&query=Network+180+790+Fuller+Ave+NE+Grand+Rapids" target="_blank" class="btn-rmap">📍</a></div></div>
+            <div class="res-card"><div class="res-name">Pine Rest PUCC</div><div class="res-type">Psych Urgent Care · 300 68th St SE</div><div class="res-actions"><a href="tel:6164559200" class="btn-rcall">616-455-9200</a><a href="https://www.google.com/maps/search/?api=1&query=Pine+Rest+Urgent+Care+Grand+Rapids" target="_blank" class="btn-rmap">📍</a></div></div>
+            <div class="res-card"><div class="res-name">Forest View</div><div class="res-type">Psych Hospital · 1055 Medical Park Dr</div><div class="res-actions"><a href="tel:6169429610" class="btn-rcall">616-942-9610</a><a href="https://www.google.com/maps/search/?api=1&query=Forest+View+Hospital+Grand+Rapids" target="_blank" class="btn-rmap">📍</a></div></div>
+            <div class="res-card"><div class="res-name">Spectrum / Butterworth</div><div class="res-type">General ED · 100 Michigan St NE</div><div class="res-actions"><a href="tel:6167747444" class="btn-rcall">616-774-7444</a><a href="https://www.google.com/maps/search/?api=1&query=Spectrum+Health+Butterworth+Grand+Rapids" target="_blank" class="btn-rmap">📍</a></div></div>
+            <div class="res-card"><div class="res-name">Trinity (St. Mary's)</div><div class="res-type">General ED · 200 Jefferson Ave SE</div><div class="res-actions"><a href="tel:6166855000" class="btn-rcall">616-685-5000</a><a href="https://www.google.com/maps/search/?api=1&query=Trinity+Health+Saint+Marys+Grand+Rapids" target="_blank" class="btn-rmap">📍</a></div></div>
+            <div class="res-card dark"><div class="res-name">988 Lifeline</div><div class="res-type">National Crisis Line · 24/7</div><div class="res-actions"><a href="tel:988" class="btn-rcall">Call or Text 988</a></div></div>
+        </div>
+    </div>
+</section>
+
+<footer><div class="container"><p>Professional Protocol · Grand Rapids, MI · Not for patient use</p></div></footer>
+
+<script>
+let riskScore = 0, isWilling = true;
+
+function switchView(v) {
+    document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+    document.getElementById('view-' + v).classList.add('active');
+    window.scrollTo(0, 0);
+}
+
+function toggleRisk(btn) { btn.classList.toggle('checked'); calculateRisk(); }
+
+function toggleProtective(btn) {
+    btn.classList.toggle('checked');
+    const count = document.querySelectorAll('.protective-btn.checked').length;
+    document.getElementById('protective-count').innerHTML = count + ' <span>of 8</span>';
+}
+
+function calculateRisk() {
+    riskScore = 0;
+    document.querySelectorAll('.risk-btn.checked').forEach(btn => { riskScore += parseInt(btn.dataset.weight || 0); });
+    const label = document.getElementById('risk-label');
+    const dot   = document.getElementById('risk-dot');
+    const desc  = document.getElementById('risk-description');
+    const card  = document.getElementById('risk-card');
+    if (riskScore <= 2) {
+        label.textContent = 'LOW RISK'; label.style.color = 'var(--teal-400)';
+        dot.style.background = 'var(--teal-400)';
+        desc.textContent = 'Passive ideation only or no significant risk factors identified. Outpatient management with enhanced monitoring may be appropriate.';
+        card.className = 'risk-card';
+    } else if (riskScore <= 5) {
+        label.textContent = 'MODERATE'; label.style.color = '#fb923c';
+        dot.style.background = '#fb923c';
+        desc.textContent = 'Active ideation present. No confirmed plan or intent, but risk is elevated. Consider safety plan, means restriction, and increased session frequency.';
+        card.className = 'risk-card ring-orange';
+    } else {
+        label.textContent = 'HIGH RISK'; label.style.color = 'var(--red-400, #f87171)';
+        dot.style.background = '#f87171';
+        desc.textContent = 'Confirmed plan, intent, prior behavior, or means access present. Higher level of care should be strongly considered. Route to Scenario B or C.';
+        card.className = 'risk-card ring-red';
+    }
+}
+
+function toggleWillingness() {
+    isWilling = !isWilling;
+    document.getElementById('willing-dot').className    = isWilling ? 'toggle-dot'     : 'toggle-dot off';
+    document.getElementById('willing-toggle').className = isWilling ? 'toggle-track'    : 'toggle-track off';
+    document.getElementById('label-willing').className  = isWilling ? 'toggle-yes'      : 'toggle-yes dim';
+    document.getElementById('label-unwilling').className = isWilling ? 'toggle-no'      : 'toggle-no lit';
+}
+
+function manualScenario(t) { switchView('scenarios'); renderScenario(t); }
+function autoScenario() { manualScenario(riskScore >= 6 ? (isWilling ? 'B' : 'C') : 'A'); }
+
+function initDropdowns() {
+    document.querySelectorAll('.dropdown-group').forEach(group => {
+        let timer;
+        const menu = group.querySelector('.dropdown-menu');
+        group.addEventListener('mouseenter', () => { clearTimeout(timer); menu.classList.add('open'); });
+        group.addEventListener('mouseleave', () => { timer = setTimeout(() => menu.classList.remove('open'), 120); });
+    });
+}
+
+function renderScenario(t) {
+    document.getElementById('scenario-content').innerHTML = t === 'A' ? scenarioA() : t === 'B' ? scenarioB() : scenarioC();
+}
+
+function scenarioA() { return `
+<div class="scenario-card teal">
+    <div class="scenario-hdr bg-teal">
+        <span class="scenario-badge">Scenario A</span>
+        <div class="scenario-title">Outpatient Monitoring</div>
+        <div class="scenario-subtitle">Low to moderate risk — no imminent plan or intent identified. Continued outpatient care with increased structure.</div>
+    </div>
+    <div class="scenario-body s-space">
+        <div class="grid-2col">
+            <div class="ibox teal">
+                <div class="ibox-ttl teal">Session Frequency</div>
+                <p class="ibox-text teal">Consider increasing frequency of sessions or conducting brief telehealth check-ins between scheduled appointments to maintain the therapeutic alliance and monitor for any escalation in risk.</p>
+            </div>
+            <div class="ibox teal">
+                <div class="ibox-ttl teal">Safety / Connection Plan</div>
+                <p class="ibox-text teal">If not already in place, consider collaboratively developing a safety or connection plan with the client. Several evidence-based tools are available:</p>
+                <ul style="margin-top:.6rem;padding-left:1rem;font-size:.8rem;color:var(--teal-900);line-height:1.8;">
+                    <li><a href="https://suicidepreventionlifeline.org/wp-content/uploads/2016/08/Brown_StanleySafetyPlanTemplate.pdf" target="_blank" style="color:var(--teal-700);font-weight:700;text-decoration:underline;">Stanley-Brown Safety Planning Template</a></li>
+                    <li><a href="https://zerosuicide.edc.org/sites/default/files/CAMS%20Framework%20Overview.pdf" target="_blank" style="color:var(--teal-700);font-weight:700;text-decoration:underline;">CAMS (Collaborative Assessment &amp; Management of Suicidality)</a></li>
+                    <li><a href="https://www.sprc.org/resources-programs/safety-planning-intervention" target="_blank" style="color:var(--teal-700);font-weight:700;text-decoration:underline;">SPRC Safety Planning Overview</a></li>
+                    <li><a href="https://connectingtolife.com/" target="_blank" style="color:var(--teal-700);font-weight:700;text-decoration:underline;">Connecting to Life (reasons for living tool)</a></li>
+                </ul>
+            </div>
+            <div class="ibox teal">
+                <div class="ibox-ttl teal">Collateral Contact</div>
+                <p class="ibox-text teal">Consider looping in a trusted emergency contact with an appropriate ROI to assist with environmental safety and to act as an early-warning contact if the client's presentation changes between sessions.</p>
+            </div>
+            <div class="ibox teal">
+                <div class="ibox-ttl teal">Means Restriction</div>
+                <p class="ibox-text teal">Counsel on lethal means reduction, particularly firearms. <strong>MDHHS identifies firearm restriction as the highest-efficacy single intervention.</strong> Consider requesting third-party removal or secured storage and document the client's response.</p>
+                <p class="ibox-text teal" style="margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--teal-100);"><strong>Verification:</strong> Self-report alone is insufficient during elevated risk. If collateral contact is involved, speak directly with them: <em>"Is the firearm removed from the home? Who has physical possession? Where is it stored?"</em> Record name, relationship, date/time, and specific means addressed.</p>
+            </div>
+        </div>
+
+        <div class="ibox slate">
+            <div class="sub-title">Ongoing Monitoring Plan</div>
+            <p style="font-size:.85rem;color:var(--slate-700);line-height:1.7;margin-bottom:.75rem;">Before ending the session, consider collaboratively establishing a clear plan for how you and the client will continue to monitor risk. This might include:</p>
+            <ul style="font-size:.85rem;color:var(--slate-700);line-height:1.9;padding-left:1.25rem;">
+                <li>Agreed-upon check-in method and frequency between sessions (e.g., brief telehealth, secure messaging)</li>
+                <li>Specific warning signs or behaviors that would prompt the client to reach out sooner or escalate care</li>
+                <li>A named contact the client will reach out to if they cannot reach you</li>
+                <li>Clear criteria for when the plan would shift to a higher level of care (Scenario B or C)</li>
+            </ul>
+        </div>
+
+        <div class="ibox amber"><div class="ibox-icon-row"><div class="ibox-icon amber">📝</div><div><div class="ibox-ttl amber">Documentation Considerations</div><ul class="doc-list">
+            <li>• Record specific ideation content reported by client (quotes when possible), C-SSRS items endorsed, and your clinical risk formulation including protective factors considered.</li>
+            <li>• Document safety plan review or development: what was covered, what changed, and whether the client demonstrated understanding.</li>
+            <li>• If means restriction was discussed, note client's response and any third-party verification performed (name, date, time, method).</li>
+            <li>• Record the agreed-upon monitoring plan, including check-in frequency, escalation triggers, and named contacts.</li>
+            <li>• Document rationale for continuing outpatient care — why higher level of care was not indicated at this time.</li>
+            <li>• If consultation was obtained: document the consultant's name, date/time, method of contact, and summary of clinical guidance received.</li>
+        </ul></div></div></div>
+    </div>
+</div>`; }
+
+function scenarioB() { return `
+<div class="scenario-card blue">
+    <div class="scenario-hdr bg-blue">
+        <span class="scenario-badge">Scenario B</span>
+        <div class="scenario-title">Voluntary Escalation of Care</div>
+        <div class="scenario-subtitle">High risk — client is willing to accept a higher level of care. Facilitate a safe, supported transition.</div>
+    </div>
+    <div class="scenario-body s-space">
+
+        <div>
+            <div class="sub-title">Steps to Support Voluntary Escalation</div>
+            <div style="display:flex;flex-direction:column;gap:.75rem;">
+                <div class="script-block">
+                    <div class="script-lbl slate" style="color:var(--blue-600);">Step 1 — Collaboratively Discuss the Need for Higher Care</div>
+                    <p style="font-size:.85rem;color:var(--slate-700);line-height:1.7;">Frame the conversation around safety and support, not failure. Help the client understand that a higher level of care is a temporary and appropriate step, not a punishment. Explore their concerns about hospitalization (loss of control, stigma, work, family) and address them directly. Collaborative language increases the likelihood of follow-through.</p>
+                </div>
+                <div class="script-block">
+                    <div class="script-lbl slate" style="color:var(--blue-600);">Step 2 — Confirm Willingness and Identify the Right Level of Care</div>
+                    <p style="font-size:.85rem;color:var(--slate-700);line-height:1.7;">Confirm the client's explicit agreement. Assess together whether a psychiatric urgent care (e.g., Pine Rest PUCC), inpatient evaluation (e.g., Forest View), a general ED, or a crisis stabilization program is the most appropriate fit based on acuity, access, and insurance. Involve the client in this decision where possible.</p>
+                </div>
+                <div class="script-block">
+                    <div class="script-lbl slate" style="color:var(--blue-600);">Step 3 — Obtain ROI and Involve Emergency Contact</div>
+                    <p style="font-size:.85rem;color:var(--slate-700);line-height:1.7;">Before making any collateral contact, obtain a signed release of information. With ROI in place, contact the identified emergency contact to arrange safe transport. Brief them on the situation in general terms and what to expect at the receiving facility. Avoid leaving the client to navigate this alone.</p>
+                </div>
+                <div class="script-block">
+                    <div class="script-lbl slate" style="color:var(--blue-600);">Step 4 — Notify Receiving Facility Ahead of Arrival</div>
+                    <p style="font-size:.85rem;color:var(--slate-700);line-height:1.7;">Call the receiving facility before the client arrives. Provide a brief clinical handoff: C-SSRS findings, identified means, relevant history, and your contact information. Offer to fax your assessment. This improves continuity and reduces the risk of the client being turned away or under-triaged.</p>
+                </div>
+                <div class="script-block">
+                    <div class="script-lbl slate" style="color:var(--blue-600);">Step 5 — Confirm Safe Arrival and Plan for Aftercare</div>
+                    <p style="font-size:.85rem;color:var(--slate-700);line-height:1.7;">Follow up with the emergency contact or facility to confirm the client arrived safely. Consider how you will resume care upon discharge — communicate with the inpatient team about outpatient follow-up, frequency of contact post-discharge, and any safety planning that should carry forward.</p>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="sub-title">Coordinate Care</div>
+            <div class="ibox orange" style="margin-bottom:.75rem;"><div class="ibox-icon-row"><div class="ibox-icon orange">📑</div><div><div class="ibox-ttl orange">ROI Required Before Any Collateral Contact</div><p class="ibox-text orange">Ensure a signed release of information for emergency contacts and receiving hospital is obtained before sharing clinical information or coordinating transport with third parties.</p></div></div></div>
+            <div class="grid-2col" style="margin-bottom:.75rem;">
+                <div class="script-block"><div class="script-lbl slate">To Emergency Contact</div><p class="script-text">"I have agreed with [Patient] that a higher level of care is the right step right now. We need your support to help them get there safely. I can walk you through what to expect at [Facility] and what to say when you arrive."</p></div>
+                <div class="script-block"><div class="script-lbl slate">To Hospital Intake</div><p class="script-text">"[Patient] is arriving voluntarily, accompanied by family. C-SSRS indicates [specific items endorsed]. They have access to [identified means]. I'm available for collateral at [number] and will fax my assessment shortly."</p></div>
+            </div>
+            <div class="sub-title" style="margin-top:1.25rem;">Receiving Facilities</div>
+            <div class="facility-grid">
+                <div class="facility-card"><div class="fac-name">Pine Rest PUCC</div><div class="fac-addr">📍 300 68th St SE</div><div class="fac-type">Psych Urgent Care</div><div class="fac-actions"><a href="tel:6164559200" class="btn-call">616-455-9200</a><a href="https://www.google.com/maps/search/?api=1&query=Pine+Rest+Urgent+Care+Grand+Rapids" target="_blank" class="btn-map">📍</a></div></div>
+                <div class="facility-card"><div class="fac-name">Forest View</div><div class="fac-addr">📍 1055 Medical Park Dr</div><div class="fac-type">Psych Hospital</div><div class="fac-actions"><a href="tel:6169429610" class="btn-call">616-942-9610</a><a href="https://www.google.com/maps/search/?api=1&query=Forest+View+Hospital+Grand+Rapids" target="_blank" class="btn-map">📍</a></div></div>
+                <div class="facility-card"><div class="fac-name">Trinity / St. Mary's</div><div class="fac-addr">📍 200 Jefferson Ave SE</div><div class="fac-type">General ED</div><div class="fac-actions"><a href="tel:6166855000" class="btn-call">616-685-5000</a><a href="https://www.google.com/maps/search/?api=1&query=Trinity+Health+Saint+Marys+Grand+Rapids" target="_blank" class="btn-map">📍</a></div></div>
+                <div class="facility-card"><div class="fac-name">Network 180</div><div class="fac-addr">📍 790 Fuller Ave NE</div><div class="fac-type">Crisis / CMH</div><div class="fac-actions"><a href="tel:6163363909" class="btn-call">616-336-3909</a><a href="https://www.google.com/maps/search/?api=1&query=Network+180+790+Fuller+Ave+NE+Grand+Rapids" target="_blank" class="btn-map">📍</a></div></div>
+            </div>
+        </div>
+
+        <div class="ibox amber"><div class="ibox-icon-row"><div class="ibox-icon amber">📝</div><div><div class="ibox-ttl amber">Documentation Considerations</div><ul class="doc-list">
+            <li>• Document C-SSRS items endorsed, client quotes, and your risk formulation including both risk and protective factors that informed the decision to pursue higher level of care.</li>
+            <li>• Record the client's stated willingness and how the decision to seek higher care was reached collaboratively.</li>
+            <li>• Note the receiving facility name, admission type (voluntary), and the name of the intake contact you spoke with.</li>
+            <li>• Record who transported the client, at what time, and confirmation of safe arrival if available.</li>
+            <li>• Document any ROI obtained: who signed, for what purpose, and what information was shared with whom.</li>
+            <li>• Note any aftercare planning discussed with the inpatient team or the client prior to discharge.</li>
+            <li>• If consultation was obtained: document the consultant's name, credential, date/time of contact, method, and the clinical guidance provided and how it informed your decision.</li>
+        </ul></div></div></div>
+
+    </div>
+</div>`; }
+
+function scenarioC() { return `
+<div class="scenario-card red">
+    <div class="scenario-hdr bg-red">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:1rem;">
+            <div>
+                <span class="scenario-badge">Scenario C</span>
+                <div class="scenario-title">Involuntary Escalation of Care</div>
+                <div class="scenario-subtitle">High risk — client is unwilling or unable to engage voluntarily. Initiate PCM 201 petition process.</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:.5rem;flex-shrink:0;">
+                <a href="https://www.courts.michigan.gov/siteassets/forms/scao-approved/pcm201.pdf" target="_blank" style="background:white;color:var(--red-600);font-size:.65rem;font-weight:900;padding:.6rem 1rem;border-radius:.75rem;text-align:center;white-space:nowrap;">PCM 201 — Petition Form</a>
+                <a href="https://www.courts.michigan.gov/siteassets/forms/scao-approved/mc97.pdf" target="_blank" style="background:var(--slate-900);color:white;font-size:.65rem;font-weight:900;padding:.6rem 1rem;border-radius:.75rem;text-align:center;white-space:nowrap;">MC 97 — PII Privacy Form</a>
+            </div>
+        </div>
+    </div>
+    <div class="scenario-body s-space">
+
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-title">Complete SCAO Forms</div>
+            <div class="script-block" style="margin-bottom:.75rem;">
+                <p style="font-size:.85rem;color:var(--slate-700);line-height:1.7;margin-bottom:.75rem;"><strong>PCM 201 (Petition):</strong> Document specific recent acts, statements, or threats. Use direct language and quotes wherever possible: <em>"Patient stated 'I have the gun loaded and I intend to use it tonight.'"</em> Vague descriptions are insufficient for judicial review.</p>
+                <p style="font-size:.85rem;color:var(--red-700);font-weight:700;margin-bottom:.25rem;">⚠ MC 97 — Protected PII:</p>
+                <p style="font-size:.85rem;color:var(--slate-700);line-height:1.7;">Petitions are public records. Place SSN and DOB on the MC 97 only. On the PCM 201, write "See MC 97" in those fields.</p>
+            </div>
+            <div class="ibox dark" style="padding:1.25rem;">
+                <div style="font-size:.6rem;font-weight:900;color:var(--teal-400);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.75rem;">Information to Include in the Petition</div>
+                <ul class="checklist">
+                    <li><span class="ck">✔</span><span>Specific quotes of suicidal statements made by the client</span></li>
+                    <li><span class="ck">✔</span><span>Access to lethal means — confirmed type and location</span></li>
+                    <li><span class="ck">✔</span><span>Presence of psychosis, severe agitation, or disorganization</span></li>
+                    <li><span class="ck">✔</span><span>History of non-compliance with treatment or prior attempts</span></li>
+                    <li><span class="ck">✔</span><span>Current intoxication status, if known</span></li>
+                    <li><span class="ck">✔</span><span>Specific reason voluntary care was offered and refused or not viable</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-title">Request Law Enforcement / CIT</div>
+            <div class="script-block" style="display:flex;flex-direction:column;gap:1rem;">
+                <div><div class="script-lbl red">911 Dispatch Script</div><p class="script-text">"This is [Your Name], a licensed mental health clinician at [Address]. I am requesting CIT-trained officers for a high-risk psychiatric emergency. I have completed a PCM 201 Petition for involuntary treatment. The patient poses imminent risk to themselves. There are [no / possible] weapons in the immediate vicinity."</p></div>
+                <div><div class="script-lbl slate">To Officer On-Site</div><p class="script-text sm">"Officer, I am the petitioner. Here is the PCM 201 and MC 97. I am requesting they be taken into protective custody and transported to the nearest medical ED for evaluation and clinical certification."</p></div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-title">Coordinate with Receiving ED</div>
+            <div style="display:flex;flex-direction:column;gap:.75rem;">
+                <div class="script-block"><div class="script-lbl red">Hospital Charge Nurse Script</div><p class="script-text">"This is [Your Name], a clinician. GRPD is currently transporting [Patient Name] to your ED on an involuntary PCM 201 petition. High lethality indicators include [Plan / Intent / Access to Means]. I am available for collateral at [number] and will fax my C-SSRS notes and the petition shortly."</p></div>
+                <div class="ibox red-lt"><div class="ibox-ttl red" style="margin-bottom:.4rem;">Destination — Important</div><p style="font-size:.8rem;color:var(--red-900);line-height:1.6;font-weight:500;">Involuntary patients must go to a general medical ED (Butterworth or St. Mary's) first for medical clearance and the first clinical certificate (PCM 208) before psychiatric admission.</p></div>
+            </div>
+        </div>
+
+        <div class="ibox amber"><div class="ibox-icon-row"><div class="ibox-icon amber">📝</div><div><div class="ibox-ttl amber">Documentation Considerations</div><ul class="doc-list">
+            <li>• Document the full clinical basis for initiating an involuntary petition — specific behaviors, statements, C-SSRS items endorsed, and your reasoning that voluntary care was not viable.</li>
+            <li>• Record what voluntary options were offered, how the client responded, and why they were deemed insufficient or refused.</li>
+            <li>• Note the time and method of 911 contact, officer name and badge number if obtained, and name of ED charge nurse contacted.</li>
+            <li>• Record all forms filed: PCM 201 completion time, MC 97 filed separately, and fax confirmation to receiving ED.</li>
+            <li>• Document any collateral contacts made, what was shared, and the legal basis under which you disclosed (imminent danger exception to confidentiality).</li>
+            <li>• Consultation is strongly recommended before or alongside an involuntary petition when time permits. Document the consultant's name, credential, date/time, and guidance provided. If time did not permit prior consultation, note that and document a plan for post-incident review.</li>
+        </ul></div></div></div>
+
+    </div>
+</div>`; }
+
+window.onload = () => { calculateRisk(); initDropdowns(); };
+</script>
+</body>
+</html>
