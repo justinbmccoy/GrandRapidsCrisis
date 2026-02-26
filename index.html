@@ -258,6 +258,27 @@
         .back-btn { font-size: .85rem; font-weight: 700; color: var(--teal-600); cursor: pointer; }
         .back-btn:hover { text-decoration: underline; }
 
+        /* QUESTION CARDS */
+        .q-card { background: white; border-radius: 1rem; border: 1px solid var(--slate-200); padding: 1rem 1.25rem; margin-bottom: .5rem; transition: border-color .15s; }
+        .q-card:last-child { margin-bottom: 0; }
+        .q-num { font-size: .6rem; font-weight: 900; color: var(--slate-400); text-transform: uppercase; letter-spacing: .1em; margin-bottom: .3rem; }
+        .q-text { font-size: .85rem; font-weight: 600; color: var(--slate-800); line-height: 1.5; margin-bottom: .75rem; }
+        .q-btns { display: flex; gap: .4rem; flex-wrap: wrap; }
+        .q-btn { padding: .375rem .9rem; border-radius: .5rem; font-size: .75rem; font-weight: 700; border: 2px solid var(--slate-200); color: var(--slate-500); background: var(--slate-50); transition: all .15s; cursor: pointer; font-family: inherit; }
+        .q-btn:hover { border-color: var(--slate-400); background: white; }
+        .q-btn.sel-yes      { background: var(--red-50);    border-color: var(--red-500);    color: var(--red-700); }
+        .q-btn.sel-no       { background: var(--green-50);  border-color: var(--green-600);  color: var(--green-700); }
+        .q-btn.sel-recent   { background: var(--red-50);    border-color: var(--red-500);    color: var(--red-700); }
+        .q-btn.sel-lifetime { background: var(--orange-50); border-color: #f97316; color: var(--orange-800); }
+        .q-followup { margin-top: .5rem; display: none; }
+        .q-followup.visible { display: block; }
+        .q-followup-label { font-size: .65rem; font-weight: 900; color: var(--red-600); text-transform: uppercase; letter-spacing: .1em; padding: .5rem .75rem .25rem; background: var(--red-50); border-radius: .5rem .5rem 0 0; border: 1px solid var(--red-100); border-bottom: none; }
+        .q-followup-inner { padding: .5rem; background: var(--red-50); border-radius: 0 0 .5rem .5rem; border: 1px solid var(--red-100); display: flex; flex-direction: column; gap: .4rem; }
+        .q-incomplete-note { font-size: .65rem; color: var(--slate-400); font-style: italic; margin-top: .35rem; }
+        .q-section-hdr { font-size: .65rem; font-weight: 900; color: var(--slate-400); text-transform: uppercase; letter-spacing: .15em; margin: 1rem 0 .5rem; padding-bottom: .35rem; border-bottom: 1px solid var(--slate-200); }
+        .judgment-note { background: var(--slate-50); border: 1px solid var(--slate-200); border-left: 3px solid var(--slate-400); border-radius: 0 .75rem .75rem 0; padding: .75rem 1rem; margin-top: 1rem; font-size: .75rem; color: var(--slate-600); line-height: 1.6; }
+        .judgment-note strong { color: var(--slate-700); }
+
         footer { border-top: 1px solid var(--slate-200); padding: 2rem 0; margin-top: 3rem; text-align: center; }
         footer p { font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .2em; color: var(--slate-400); }
     </style>
@@ -318,47 +339,77 @@
             <div>
                 <div class="card" style="margin-bottom:1.5rem;">
                     <div class="card-header">
-                        <h3>C-SSRS: Suicidal Ideation</h3>
-                        <p>Items 1–5 reflect the C-SSRS ideation severity continuum. Check all that apply.</p>
+                        <h3>C-SSRS Screening</h3>
+                        <p>Answer each question based on the client's current presentation. Questions 3–5 appear only if Question 2 is endorsed.</p>
                     </div>
                     <div class="card-body">
-                        <button onclick="toggleRisk(this)" class="risk-btn" data-weight="1">
-                            <div><div class="item-title">1. Passive Ideation</div><div class="item-desc">Wishes to be dead or not alive; no thought of killing self.</div></div>
-                            <div class="check-indicator">✓</div>
-                        </button>
-                        <button onclick="toggleRisk(this)" class="risk-btn" data-weight="1">
-                            <div><div class="item-title">2. Active Ideation (Non-specific)</div><div class="item-desc">Thoughts of killing self; no method, plan, or intent identified.</div></div>
-                            <div class="check-indicator">✓</div>
-                        </button>
-                        <button onclick="toggleRisk(this)" class="risk-btn" data-weight="3">
-                            <div><div class="item-title">3. Active Ideation with Method</div><div class="item-desc">Has thought about how; no plan or intent to act.</div></div>
-                            <div class="check-indicator">✓</div>
-                        </button>
-                        <button onclick="toggleRisk(this)" class="risk-btn" data-weight="6">
-                            <div><div class="item-title">4. Active Ideation with Intent</div><div class="item-desc">Some intention of acting on thoughts; no specific plan. <span class="high-flag">High risk alone.</span></div></div>
-                            <div class="check-indicator">✓</div>
-                        </button>
-                        <button onclick="toggleRisk(this)" class="risk-btn" data-weight="6">
-                            <div><div class="item-title">5. Active Ideation with Plan &amp; Intent</div><div class="item-desc">Has worked out details; intends to carry out the plan. <span class="high-flag">High risk alone.</span></div></div>
-                            <div class="check-indicator">✓</div>
-                        </button>
-                    </div>
-                </div>
 
-                <div class="card" style="margin-bottom:1.5rem;">
-                    <div class="card-header">
-                        <h3>C-SSRS: Behavior &amp; Clinical Risk Factors</h3>
-                        <p>Behavioral history and means access are independent predictors of lethality.</p>
-                    </div>
-                    <div class="card-body">
-                        <button onclick="toggleRisk(this)" class="risk-btn" data-weight="2">
-                            <div><div class="item-title">6. Past Suicidal Behavior</div><div class="item-desc">Prior attempt(s), aborted/interrupted attempt, or preparatory acts (acquired means, wrote note).</div></div>
-                            <div class="check-indicator">✓</div>
-                        </button>
-                        <button onclick="toggleRisk(this)" class="risk-btn" data-weight="2">
-                            <div><div class="item-title">7. Access to Lethal Means</div><div class="item-desc">Has access to identified method (firearm, medication stockpile, etc.).</div></div>
-                            <div class="check-indicator">✓</div>
-                        </button>
+                        <div class="q-section-hdr">Ideation</div>
+
+                        <div class="q-card" id="q1">
+                            <div class="q-num">Question 1 — Passive Ideation</div>
+                            <div class="q-text">Have you wished you were dead or wished you could go to sleep and not wake up?</div>
+                            <div class="q-btns">
+                                <button class="q-btn" data-val="yes" onclick="setAnswer(1,'yes',this)">Yes</button>
+                                <button class="q-btn" data-val="no"  onclick="setAnswer(1,'no',this)">No</button>
+                            </div>
+                        </div>
+
+                        <div class="q-card" id="q2">
+                            <div class="q-num">Question 2 — Active Ideation</div>
+                            <div class="q-text">Have you actually had any thoughts about killing yourself?</div>
+                            <div class="q-btns">
+                                <button class="q-btn" data-val="yes" onclick="setAnswer(2,'yes',this)">Yes</button>
+                                <button class="q-btn" data-val="no"  onclick="setAnswer(2,'no',this)">No</button>
+                            </div>
+                            <div class="q-followup" id="q2-followup">
+                                <div class="q-followup-label">If yes to Q2 — continue with Questions 3–5</div>
+                                <div class="q-followup-inner">
+                                    <div class="q-card" id="q3" style="margin-bottom:0;border-color:var(--red-100);">
+                                        <div class="q-num">Question 3 — Method</div>
+                                        <div class="q-text">Have you been thinking about how you might do this?</div>
+                                        <div class="q-btns">
+                                            <button class="q-btn" data-val="yes" onclick="setAnswer(3,'yes',this)">Yes</button>
+                                            <button class="q-btn" data-val="no"  onclick="setAnswer(3,'no',this)">No</button>
+                                        </div>
+                                    </div>
+                                    <div class="q-card" id="q4" style="margin-bottom:0;border-color:var(--red-100);">
+                                        <div class="q-num">Question 4 — Intent <span style="color:var(--red-500);font-size:.6rem;">⚠ Auto High Risk if Yes</span></div>
+                                        <div class="q-text">Have you had these thoughts and had some intention of acting on them?</div>
+                                        <div class="q-btns">
+                                            <button class="q-btn" data-val="yes" onclick="setAnswer(4,'yes',this)">Yes</button>
+                                            <button class="q-btn" data-val="no"  onclick="setAnswer(4,'no',this)">No</button>
+                                        </div>
+                                    </div>
+                                    <div class="q-card" id="q5" style="margin-bottom:0;border-color:var(--red-100);">
+                                        <div class="q-num">Question 5 — Plan <span style="color:var(--red-500);font-size:.6rem;">⚠ Auto High Risk if Yes</span></div>
+                                        <div class="q-text">Have you started to work out or worked out the details of how to kill yourself? Did you intend to carry out this plan?</div>
+                                        <div class="q-btns">
+                                            <button class="q-btn" data-val="yes" onclick="setAnswer(5,'yes',this)">Yes</button>
+                                            <button class="q-btn" data-val="no"  onclick="setAnswer(5,'no',this)">No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="q-section-hdr">Behavior</div>
+
+                        <div class="q-card" id="q6">
+                            <div class="q-num">Question 6 — Past Suicidal Behavior <span style="color:var(--red-500);font-size:.6rem;">⚠ Auto High Risk if recent</span></div>
+                            <div class="q-text">Have you done anything, started to do anything, or prepared to do anything to end your life?</div>
+                            <div class="q-btns">
+                                <button class="q-btn" data-val="recent"   onclick="setAnswer(6,'recent',this)">Yes — past 3 months</button>
+                                <button class="q-btn" data-val="lifetime" onclick="setAnswer(6,'lifetime',this)">Yes — lifetime only</button>
+                                <button class="q-btn" data-val="no"       onclick="setAnswer(6,'no',this)">No</button>
+                            </div>
+                            <p class="q-incomplete-note">If lifetime only: consider alongside current ideation and other risk factors before determining overall risk level.</p>
+                        </div>
+
+                        <div class="judgment-note">
+                            <strong>Clinical judgment note:</strong> This screening tool supports — but does not replace — clinical judgment. Risk level should be determined by integrating C-SSRS findings with protective factors, client history, therapeutic alliance, and your full clinical assessment. When in doubt, consult.
+                        </div>
+
                     </div>
                 </div>
 
@@ -414,11 +465,11 @@
                 <button onclick="autoScenario()" class="btn-route">Route to Protocol ➜</button>
 
                 <div class="scoring-ref">
-                    <div class="scoring-lbl">C-SSRS Scoring Reference</div>
-                    <div class="score-row"><div class="sdot low"></div><span><strong>Low (0–2):</strong> Passive or non-specific ideation only</span></div>
-                    <div class="score-row"><div class="sdot mod"></div><span><strong>Moderate (3–5):</strong> Active ideation with identified method</span></div>
-                    <div class="score-row"><div class="sdot high"></div><span><strong>High (6+):</strong> Intent, specific plan, or prior behavior present</span></div>
-                    <div class="scoring-note">Items 4 and 5 (intent/plan) are independently HIGH risk. Protective factors and clinical judgment always inform the final formulation.</div>
+                    <div class="scoring-lbl">C-SSRS Decision Rules</div>
+                    <div class="score-row"><div class="sdot low"></div><span><strong>Low / Monitor:</strong> Q1 or Q2 yes; Q3–Q6 all no</span></div>
+                    <div class="score-row"><div class="sdot mod"></div><span><strong>Moderate:</strong> Q3 yes; or Q6 lifetime only (consider full picture)</span></div>
+                    <div class="score-row"><div class="sdot high"></div><span><strong>High:</strong> Q4 or Q5 yes; or Q6 within past 3 months</span></div>
+                    <div class="scoring-note">If Q2 = No, skip Q3–Q5. Q4, Q5, and recent Q6 are each independently sufficient for HIGH risk. Clinical judgment always governs the final determination.</div>
                 </div>
             </div>
         </div>
@@ -457,7 +508,8 @@
 <footer><div class="container"><p>Professional Protocol · Grand Rapids, MI · Not for patient use</p></div></footer>
 
 <script>
-let riskScore = 0, isWilling = true;
+const answers = { 1: null, 2: null, 3: null, 4: null, 5: null, 6: null };
+let isWilling = true;
 
 function switchView(v) {
     document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
@@ -465,7 +517,85 @@ function switchView(v) {
     window.scrollTo(0, 0);
 }
 
-function toggleRisk(btn) { btn.classList.toggle('checked'); calculateRisk(); }
+function setAnswer(q, val, btn) {
+    answers[q] = val;
+    // Update button styles for this question
+    const card = document.getElementById('q' + q);
+    card.querySelectorAll('.q-btn').forEach(b => {
+        b.classList.remove('sel-yes','sel-no','sel-recent','sel-lifetime');
+    });
+    if      (val === 'yes')      btn.classList.add('sel-yes');
+    else if (val === 'no')       btn.classList.add('sel-no');
+    else if (val === 'recent')   btn.classList.add('sel-recent');
+    else if (val === 'lifetime') btn.classList.add('sel-lifetime');
+
+    // Show/hide Q3–Q5 based on Q2
+    if (q === 2) {
+        const fu = document.getElementById('q2-followup');
+        if (val === 'yes') {
+            fu.classList.add('visible');
+        } else {
+            fu.classList.remove('visible');
+            [3,4,5].forEach(n => {
+                answers[n] = null;
+                document.getElementById('q'+n).querySelectorAll('.q-btn').forEach(b =>
+                    b.classList.remove('sel-yes','sel-no'));
+            });
+        }
+    }
+    calculateRisk();
+}
+
+function calculateRisk() {
+    const q1 = answers[1], q2 = answers[2], q3 = answers[3],
+          q4 = answers[4], q5 = answers[5], q6 = answers[6];
+
+    const label = document.getElementById('risk-label');
+    const dot   = document.getElementById('risk-dot');
+    const desc  = document.getElementById('risk-description');
+    const card  = document.getElementById('risk-card');
+
+    // Auto HIGH: Q4, Q5, or Q6 recent
+    if (q4 === 'yes' || q5 === 'yes' || q6 === 'recent') {
+        label.textContent = 'HIGH RISK'; label.style.color = '#f87171';
+        dot.style.background = '#f87171';
+        desc.textContent = 'Active intent, specific plan, or suicidal behavior within the past 3 months confirmed. Higher level of care should be strongly considered. Route to Scenario B or C.';
+        card.className = 'risk-card ring-red';
+        return;
+    }
+    // MODERATE: Q3 yes, or Q6 lifetime
+    if (q3 === 'yes' || q6 === 'lifetime') {
+        label.textContent = 'MODERATE'; label.style.color = '#fb923c';
+        dot.style.background = '#fb923c';
+        desc.textContent = q6 === 'lifetime'
+            ? 'Lifetime history of suicidal behavior noted. Weigh carefully alongside current ideation, protective factors, and full clinical picture before determining overall risk.'
+            : 'Active ideation with identified method, but no confirmed intent or plan. Risk is elevated — consider enhanced monitoring, safety planning, and means restriction.';
+        card.className = 'risk-card ring-orange';
+        return;
+    }
+    // LOW/MONITOR: Q1 or Q2 yes, but Q3–Q6 all no or skipped
+    if (q2 === 'no' || (q2 === 'yes' && q4 === 'no' && q5 === 'no' && q3 === 'no' && (q6 === 'no' || q6 === null))) {
+        if (q1 === 'yes' || q2 === 'yes') {
+            label.textContent = 'LOW / MONITOR'; label.style.color = 'var(--teal-400)';
+            dot.style.background = 'var(--teal-400)';
+            desc.textContent = 'Passive or non-specific ideation only; no method, intent, plan, or recent behavior identified. Continue outpatient monitoring with a safety or connection plan in place.';
+            card.className = 'risk-card';
+            return;
+        }
+        if (q1 === 'no' && q2 === 'no') {
+            label.textContent = 'LOW'; label.style.color = 'var(--teal-400)';
+            dot.style.background = 'var(--teal-400)';
+            desc.textContent = 'No suicidal ideation or behavior endorsed. Continue routine monitoring and reassess as clinically indicated.';
+            card.className = 'risk-card';
+            return;
+        }
+    }
+    // Default: still in progress
+    label.textContent = '—'; label.style.color = 'var(--slate-500)';
+    dot.style.background = 'var(--slate-500)';
+    desc.textContent = 'Complete the screening questions above to determine risk level.';
+    card.className = 'risk-card';
+}
 
 function toggleProtective(btn) {
     btn.classList.toggle('checked');
@@ -473,41 +603,21 @@ function toggleProtective(btn) {
     document.getElementById('protective-count').innerHTML = count + ' <span>of 8</span>';
 }
 
-function calculateRisk() {
-    riskScore = 0;
-    document.querySelectorAll('.risk-btn.checked').forEach(btn => { riskScore += parseInt(btn.dataset.weight || 0); });
-    const label = document.getElementById('risk-label');
-    const dot   = document.getElementById('risk-dot');
-    const desc  = document.getElementById('risk-description');
-    const card  = document.getElementById('risk-card');
-    if (riskScore <= 2) {
-        label.textContent = 'LOW RISK'; label.style.color = 'var(--teal-400)';
-        dot.style.background = 'var(--teal-400)';
-        desc.textContent = 'Passive ideation only or no significant risk factors identified. Outpatient management with enhanced monitoring may be appropriate.';
-        card.className = 'risk-card';
-    } else if (riskScore <= 5) {
-        label.textContent = 'MODERATE'; label.style.color = '#fb923c';
-        dot.style.background = '#fb923c';
-        desc.textContent = 'Active ideation present. No confirmed plan or intent, but risk is elevated. Consider safety plan, means restriction, and increased session frequency.';
-        card.className = 'risk-card ring-orange';
-    } else {
-        label.textContent = 'HIGH RISK'; label.style.color = 'var(--red-400, #f87171)';
-        dot.style.background = '#f87171';
-        desc.textContent = 'Confirmed plan, intent, prior behavior, or means access present. Higher level of care should be strongly considered. Route to Scenario B or C.';
-        card.className = 'risk-card ring-red';
-    }
-}
-
 function toggleWillingness() {
     isWilling = !isWilling;
-    document.getElementById('willing-dot').className    = isWilling ? 'toggle-dot'     : 'toggle-dot off';
-    document.getElementById('willing-toggle').className = isWilling ? 'toggle-track'    : 'toggle-track off';
-    document.getElementById('label-willing').className  = isWilling ? 'toggle-yes'      : 'toggle-yes dim';
-    document.getElementById('label-unwilling').className = isWilling ? 'toggle-no'      : 'toggle-no lit';
+    document.getElementById('willing-dot').className     = isWilling ? 'toggle-dot'  : 'toggle-dot off';
+    document.getElementById('willing-toggle').className  = isWilling ? 'toggle-track' : 'toggle-track off';
+    document.getElementById('label-willing').className   = isWilling ? 'toggle-yes'   : 'toggle-yes dim';
+    document.getElementById('label-unwilling').className = isWilling ? 'toggle-no'    : 'toggle-no lit';
 }
 
 function manualScenario(t) { switchView('scenarios'); renderScenario(t); }
-function autoScenario() { manualScenario(riskScore >= 6 ? (isWilling ? 'B' : 'C') : 'A'); }
+function autoScenario() {
+    const q4 = answers[4], q5 = answers[5], q6 = answers[6];
+    const isHigh = q4 === 'yes' || q5 === 'yes' || q6 === 'recent';
+    const t = isHigh ? (isWilling ? 'B' : 'C') : 'A';
+    manualScenario(t);
+}
 
 function initDropdowns() {
     document.querySelectorAll('.dropdown-group').forEach(group => {
@@ -685,7 +795,7 @@ function scenarioC() { return `
             <div class="step-title">Request Law Enforcement / CIT</div>
             <div class="script-block" style="display:flex;flex-direction:column;gap:1rem;">
                 <div><div class="script-lbl red">911 Dispatch Script</div><p class="script-text">"This is [Your Name], a licensed mental health clinician at [Address]. I am requesting CIT-trained officers for a high-risk psychiatric emergency. I have completed a PCM 201 Petition for involuntary treatment. The patient poses imminent risk to themselves. There are [no / possible] weapons in the immediate vicinity."</p></div>
-                <div><div class="script-lbl slate">To Officer On-Site</div><p class="script-text sm">"Officer, I am the petitioner. Here is the PCM 201 and MC 97. I am requesting they be taken into protective custody and transported to the nearest medical ED for evaluation and clinical certification."</p></div>
+                <div style="background:var(--slate-100);border-radius:.5rem;padding:.75rem;font-size:.75rem;color:var(--slate-600);line-height:1.6;"><strong>For in-person sessions:</strong> If officers arrive at your location, be prepared to meet them, introduce yourself as the petitioner, and hand over copies of the PCM 201 and MC 97 directly. Provide a brief verbal summary of the clinical basis for the petition.</div>
             </div>
         </div>
 
@@ -710,7 +820,7 @@ function scenarioC() { return `
     </div>
 </div>`; }
 
-window.onload = () => { calculateRisk(); initDropdowns(); };
+window.onload = () => { initDropdowns(); };
 </script>
 </body>
 </html>
