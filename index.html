@@ -36,14 +36,24 @@
 
         /* NAV */
         nav { background: var(--slate-900); color: white; position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--slate-800); box-shadow: 0 4px 24px rgba(0,0,0,.3); }
-        .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: .75rem; height: 4rem; }
+        .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: .5rem; min-height: 4rem; padding: .5rem 0; flex-wrap: wrap; }
         .nav-brand { display: flex; align-items: center; gap: .75rem; cursor: pointer; flex-shrink: 0; }
-        .nav-logo { width: 2.25rem; height: 2.25rem; background: var(--teal-500); border-radius: .75rem; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: .75rem; color: white; }
+        .nav-logo { width: 2.25rem; height: 2.25rem; background: var(--teal-500); border-radius: .75rem; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: .75rem; color: white; flex-shrink: 0; }
         .nav-title { font-weight: 800; font-size: .7rem; text-transform: uppercase; letter-spacing: .05em; }
         .nav-subtitle { font-size: .6rem; color: var(--teal-400); font-weight: 700; text-transform: uppercase; letter-spacing: .15em; margin-top: .2rem; }
         .nav-brand-text { display: none; }
         @media (min-width: 480px) { .nav-brand-text { display: block; } }
-        .nav-actions { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; justify-content: flex-end; }
+        .nav-actions { display: flex; align-items: center; gap: .35rem; flex-wrap: wrap; justify-content: flex-end; flex: 1; min-width: 0; }
+
+        /* Hide verbose labels on very small screens, show icon-only versions */
+        .nav-label-full  { display: inline; }
+        .nav-label-short { display: none; }
+        @media (max-width: 600px) {
+            .nav-label-full  { display: none; }
+            .nav-label-short { display: inline; }
+            .dropdown-trigger { padding: .4rem .55rem; font-size: .65rem; }
+            .btn-resources    { padding: .4rem .55rem; font-size: .65rem; }
+        }
 
         /* DROPDOWNS */
         .dropdown-group { position: relative; display: flex; align-items: center; }
@@ -279,6 +289,31 @@
         .judgment-note { background: var(--slate-50); border: 1px solid var(--slate-200); border-left: 3px solid var(--slate-400); border-radius: 0 .75rem .75rem 0; padding: .75rem 1rem; margin-top: 1rem; font-size: .75rem; color: var(--slate-600); line-height: 1.6; }
         .judgment-note strong { color: var(--slate-700); }
 
+        /* AFTER-HOURS STEPS */
+        .ah-step { position: relative; padding-left: 3rem; margin-bottom: 2rem; }
+        .ah-step-num { position: absolute; left: 0; top: 0; width: 2rem; height: 2rem; background: var(--amber-500); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: .8rem; flex-shrink: 0; }
+        .ah-step-title { font-size: 1.1rem; font-weight: 900; color: var(--slate-800); margin-bottom: .5rem; }
+        .ah-branch { margin-top: .75rem; border-left: 3px solid var(--amber-200); padding-left: 1rem; display: flex; flex-direction: column; gap: .6rem; }
+        .ah-branch-lbl { font-size: .65rem; font-weight: 900; text-transform: uppercase; letter-spacing: .1em; margin-bottom: .25rem; }
+        .ah-branch-lbl.yes { color: var(--red-600); }
+        .ah-branch-lbl.no  { color: var(--slate-500); }
+        .ah-branch-lbl.hr  { color: var(--red-600); }
+        .ah-note { background: var(--slate-100); border-radius: .5rem; padding: .6rem .85rem; font-size: .75rem; color: var(--slate-600); line-height: 1.6; }
+
+        /* LEGAL/THERAPEUTIC CALLOUT */
+        .callout-box { border-radius: 1rem; padding: 1.1rem 1.25rem; border-left: 4px solid; }
+        .callout-box.purple { background: #faf5ff; border-color: #9333ea; }
+        .callout-box.blue   { background: var(--blue-50); border-color: var(--blue-600); }
+        .callout-box.amber  { background: var(--amber-50); border-color: var(--amber-500); }
+        .callout-box-title  { font-size: .65rem; font-weight: 900; text-transform: uppercase; letter-spacing: .1em; margin-bottom: .4rem; }
+        .callout-box.purple .callout-box-title { color: #7e22ce; }
+        .callout-box.blue   .callout-box-title { color: var(--blue-600); }
+        .callout-box.amber  .callout-box-title { color: var(--amber-800); }
+        .callout-box-text { font-size: .8rem; line-height: 1.65; }
+        .callout-box.purple .callout-box-text { color: #4a044e; }
+        .callout-box.blue   .callout-box-text { color: #1e3a5f; }
+        .callout-box.amber  .callout-box-text { color: var(--amber-900); }
+
         footer { border-top: 1px solid var(--slate-200); padding: 2rem 0; margin-top: 3rem; text-align: center; }
         footer p { font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .2em; color: var(--slate-400); }
     </style>
@@ -296,7 +331,7 @@
         </div>
         <div class="nav-actions">
             <div class="dropdown-group">
-                <button class="dropdown-trigger">Jump to Scenario <span style="font-size:.55rem;opacity:.5;">▼</span></button>
+                <button class="dropdown-trigger"><span class="nav-label-full">Jump to Scenario</span><span class="nav-label-short">Scenario</span> <span style="font-size:.55rem;opacity:.5;">▼</span></button>
                 <div class="dropdown-menu">
                     <div class="dropdown-menu-inner">
                         <div class="dropdown-header">Protocols</div>
@@ -307,8 +342,7 @@
                 </div>
             </div>
             <div class="dropdown-group">
-                <button class="dropdown-trigger">Forms <span style="font-size:.55rem;opacity:.5;">▼</span></button>
-                <div class="dropdown-menu">
+                <button class="dropdown-trigger">Forms <span style="font-size:.55rem;opacity:.5;">▼</span></button>                <div class="dropdown-menu">
                     <div class="dropdown-menu-inner">
                         <div class="dropdown-header">Legal &amp; Clinical</div>
                         <a href="https://www.courts.michigan.gov/siteassets/forms/scao-approved/pcm201.pdf" target="_blank" class="dropdown-item red">📄 PCM 201 (Petition)</a>
@@ -318,7 +352,8 @@
                     </div>
                 </div>
             </div>
-            <button onclick="switchView('directory')" class="btn-resources">📍 Resources</button>
+            <button onclick="switchView('afterhours')" style="display:flex;align-items:center;gap:.375rem;font-size:.7rem;font-weight:700;color:var(--amber-500);padding:.5rem .75rem;border-radius:.5rem;border:1px solid rgba(245,158,11,.3);background:rgba(245,158,11,.08);transition:background .15s;white-space:nowrap;" onmouseover="this.style.background='rgba(245,158,11,.15)'" onmouseout="this.style.background='rgba(245,158,11,.08)'">🌙 <span class="nav-label-full">After-Hours</span></button>
+            <button onclick="switchView('directory')" class="btn-resources">📍 <span class="nav-label-full">Resources</span></button>
         </div>
     </div>
 </nav>
@@ -484,23 +519,171 @@
     </div>
 </section>
 
+<!-- AFTER-HOURS -->
+<section id="view-afterhours" class="view-section">
+    <div class="container">
+        <div class="dir-header">
+            <div>
+                <h2 style="font-size:2rem;font-weight:900;letter-spacing:-.03em;">After-Hours Crisis Protocol</h2>
+                <p style="color:var(--slate-500);margin-top:.25rem;font-size:.85rem;">Steps to follow when a client presents in crisis outside of scheduled session time.</p>
+            </div>
+            <span class="back-btn" onclick="switchView('assessment')">← Back</span>
+        </div>
+
+        <div class="callout-box amber" style="margin-bottom:2rem;">
+            <div class="callout-box-title">Before you need this protocol</div>
+            <p class="callout-box-text">The foundation of after-hours safety is built during sessions. Ensure every high-risk client has: (1) a completed safety plan with your contact information, 988, and local crisis options written in; (2) a signed ROI on file for their emergency contact; and (3) a clear, shared understanding of what will happen if you cannot be reached. The "if I cannot reach my therapist" line on the safety plan should be explicit — not implied.</p>
+        </div>
+
+        <div style="max-width:54rem;">
+
+            <div class="ah-step">
+                <div class="ah-step-num">1</div>
+                <div class="ah-step-title">Reach Out to the Client Directly</div>
+                <p style="font-size:.85rem;color:var(--slate-700);line-height:1.7;margin-bottom:.75rem;">Call the client. If they don't answer, send a text as well and leave a voicemail. Be direct about your concern and your next steps.</p>
+                <div class="script-block" style="margin-bottom:.75rem;">
+                    <div class="script-lbl slate">Voicemail / Initial Statement</div>
+                    <p class="script-text">"You sent messages that have me concerned about your well-being. I am worried about your safety. Please call me back in the next 5 minutes. If I don't hear back from you, I will contact your emergency contact and call the police to conduct a wellness check."</p>
+                </div>
+                <div class="ah-branch">
+                    <div>
+                        <div class="ah-branch-lbl yes">If they answer — assess risk, then respond based on what you find:</div>
+                        <div style="display:flex;flex-direction:column;gap:.5rem;margin-top:.35rem;">
+                            <div class="script-block">
+                                <div class="script-lbl red">If high risk</div>
+                                <p class="script-text">"I am worried for your safety. I need you to go to the ER. Do you feel competent and confident to be able to get yourself there? Do I need to call an ambulance to take you?"</p>
+                            </div>
+                            <div class="script-block">
+                                <div class="script-lbl slate">If they say they can take themselves</div>
+                                <p class="script-text">"I will call them to let them know you are coming and will check in with them in one hour. If they say you haven't arrived and I don't hear back from you, I will call the police to conduct a wellness check."</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ah-note"><strong>If they don't answer:</strong> Proceed to Step 2 while the 5-minute window runs. Do not wait before acting if the risk signals are severe.</div>
+                </div>
+            </div>
+
+            <div class="ah-step">
+                <div class="ah-step-num">2</div>
+                <div class="ah-step-title">Contact the Emergency Contact (with ROI on file)</div>
+                <p style="font-size:.85rem;color:var(--slate-700);line-height:1.7;margin-bottom:.75rem;">If the client does not respond within 5 minutes, or if the risk signals are serious enough to require immediate collateral contact, reach out to the emergency contact listed in their chart.</p>
+                <div class="script-block" style="margin-bottom:.75rem;">
+                    <div class="script-lbl slate">To Emergency Contact</div>
+                    <p class="script-text">"[Client's first name], who listed you as an emergency contact, sent me some messages that are concerning me about their safety. I need you to call them and/or check on them. If I don't hear from you, I will need to call the police to perform a wellness check."</p>
+                </div>
+                <div class="ah-branch">
+                    <div class="ah-note"><strong>If you reach them:</strong> Ask them to confirm the client's safety directly. If they confirm the client is okay, ask the emergency contact to have the client contact you directly to confirm.</div>
+                    <div class="ah-note"><strong>If you get voicemail:</strong> Leave a message stating that you are concerned and will be initiating a wellness check if you do not hear back. Then proceed to Step 3.</div>
+                </div>
+            </div>
+
+            <div class="ah-step">
+                <div class="ah-step-num">3</div>
+                <div class="ah-step-title">Request a Wellness Check via Non-Emergency Line</div>
+                <p style="font-size:.85rem;color:var(--slate-700);line-height:1.7;margin-bottom:.75rem;">Contact the non-emergency dispatch line for the client's jurisdiction. Request a welfare check. Have the client's name, last known address, and your reason for concern ready. You can also request to be notified of the outcome.</p>
+                <div class="grid-2col" style="margin-bottom:.75rem;">
+                    <div class="facility-card" style="border-left:3px solid var(--slate-400);">
+                        <div class="fac-name">GRPD Non-Emergency</div>
+                        <div class="fac-type">City of Grand Rapids clients</div>
+                        <div class="fac-actions"><a href="tel:6164563400" class="btn-call">616-456-3400</a></div>
+                    </div>
+                    <div class="facility-card" style="border-left:3px solid var(--slate-400);">
+                        <div class="fac-name">Kent County Sheriff</div>
+                        <div class="fac-type">Outside city limits / county</div>
+                        <div class="fac-actions"><a href="tel:6166326100" class="btn-call">616-632-6100</a></div>
+                    </div>
+                </div>
+                <div class="ah-note">Have ready: client's full name, last known address, the specific behaviors or messages that prompted concern, and whether you believe there is access to weapons or other lethal means.</div>
+            </div>
+
+            <div class="ah-step" style="margin-bottom:0;">
+                <div class="ah-step-num">4</div>
+                <div class="ah-step-title">Follow Up and Facilitate Same-Day Crisis Care</div>
+                <p style="font-size:.85rem;color:var(--slate-700);line-height:1.7;margin-bottom:.75rem;">Once safety is confirmed or the client has been located, follow up about accessing same-day or next-day crisis care. Options in Grand Rapids include:</p>
+                <div class="grid-2col" style="margin-bottom:.75rem;">
+                    <div class="facility-card"><div class="fac-name">Forest View</div><div class="fac-type">Psych Hospital — 24/7</div><div class="fac-actions"><a href="tel:6169429610" class="btn-call">616-942-9610</a></div></div>
+                    <div class="facility-card"><div class="fac-name">Pine Rest PUCC</div><div class="fac-type">Mon–Fri 10AM–8PM · Sat–Sun 10AM–2PM</div><div class="fac-actions"><a href="tel:6164559200" class="btn-call">616-455-9200</a></div></div>
+                    <div class="facility-card"><div class="fac-name">Network 180</div><div class="fac-type">Crisis / CMH — 24/7</div><div class="fac-actions"><a href="tel:6163363909" class="btn-call">616-336-3909</a></div></div>
+                    <div class="facility-card"><div class="fac-name">988 Lifeline</div><div class="fac-type">Call or text — 24/7</div><div class="fac-actions"><a href="tel:988" class="btn-call">Call / Text 988</a></div></div>
+                </div>
+                <div class="ah-note">When possible, make the warm handoff yourself — call ahead to let the facility know the client is coming. Document the time of call, who you spoke with, and what was communicated.</div>
+            </div>
+
+            <div class="ibox amber" style="margin-top:2rem;"><div class="ibox-icon-row"><div class="ibox-icon amber">📝</div><div><div class="ibox-ttl amber">Documentation After an After-Hours Crisis</div><ul class="doc-list">
+                <li>• Record the date, time, and method of every contact attempt — call, text, voicemail — even unsuccessful ones.</li>
+                <li>• Document the specific content that prompted concern (messages received, behaviors reported).</li>
+                <li>• Record who you contacted (emergency contact, dispatch), at what time, and what was communicated.</li>
+                <li>• Note confirmation of safety: who confirmed it, by what means, and at what time.</li>
+                <li>• Document any referral to higher level of care: facility name, staff contacted, what was relayed, and whether a warm handoff occurred.</li>
+                <li>• If disclosure was made to emergency contact or law enforcement without a signed ROI, document the legal basis (imminent danger exception) and the minimum necessary information shared.</li>
+                <li>• Complete a follow-up note at the next session summarizing the incident, the client's current presentation, and any adjustments to the treatment or safety plan.</li>
+            </ul></div></div></div>
+
+        </div>
+    </div>
+</section>
+
 <!-- DIRECTORY -->
 <section id="view-directory" class="view-section">
     <div class="container">
         <div class="dir-header">
             <div>
                 <h2 style="font-size:2rem;font-weight:900;letter-spacing:-.03em;">Resource Directory</h2>
-                <p style="color:var(--slate-500);margin-top:.25rem;font-size:.85rem;">Verified Grand Rapids facilities for emergency support.</p>
+                <p style="color:var(--slate-500);margin-top:.25rem;font-size:.85rem;">Verified Grand Rapids area resources for emergency and crisis support.</p>
             </div>
             <span class="back-btn" onclick="switchView('assessment')">← Back</span>
         </div>
+
+        <p style="font-size:.7rem;font-weight:700;color:var(--slate-400);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.75rem;">Crisis Lines</p>
+        <div class="dir-grid" style="margin-bottom:2rem;">
+            <div class="res-card dark">
+                <div class="res-name">988 Suicide &amp; Crisis Lifeline</div>
+                <div class="res-type">Call or Text · 24/7</div>
+                <div class="res-actions"><a href="tel:988" class="btn-rcall">Call or Text 988</a></div>
+            </div>
+            <div class="res-card">
+                <div class="res-name">National Hotline</div>
+                <div class="res-type">800-273-8255 · 24/7</div>
+                <div class="res-actions"><a href="tel:18002738255" class="btn-rcall">800-273-8255</a></div>
+            </div>
+            <div class="res-card">
+                <div class="res-name">Crisis Text Line</div>
+                <div class="res-type">Text HOME to 741741 · 24/7</div>
+                <div class="res-actions" style="flex-direction:column;gap:.3rem;">
+                    <div style="background:var(--slate-100);border-radius:.75rem;padding:.6rem 1rem;font-size:.75rem;font-weight:700;color:var(--slate-600);text-align:center;">Text <strong>HOME</strong> to <strong>741741</strong></div>
+                </div>
+            </div>
+            <div class="res-card">
+                <div class="res-name">TrevorLifeline</div>
+                <div class="res-type">LGBTQ+ · 866-488-7386 · 24/7</div>
+                <div class="res-actions"><a href="tel:18664887386" class="btn-rcall">866-488-7386</a></div>
+            </div>
+            <div class="res-card">
+                <div class="res-name">Priority Health BH Line</div>
+                <div class="res-type">Priority Health Insurance Only · 24/7</div>
+                <div class="res-actions"><a href="tel:18006738043" class="btn-rcall">800-673-8043</a></div>
+            </div>
+        </div>
+
+        <p style="font-size:.7rem;font-weight:700;color:var(--slate-400);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.75rem;">Grand Rapids Facilities</p>
+        <div class="dir-grid" style="margin-bottom:2rem;">
+            <div class="res-card"><div class="res-name">Network 180</div><div class="res-type">Kent County CMH · 790 Fuller Ave NE · 24/7</div><div class="res-actions"><a href="tel:6163363909" class="btn-rcall">616-336-3909</a><a href="https://www.google.com/maps/search/?api=1&query=Network+180+790+Fuller+Ave+NE+Grand+Rapids" target="_blank" class="btn-rmap">📍</a></div></div>
+            <div class="res-card">
+                <div class="res-name">Pine Rest PUCC</div>
+                <div class="res-type">Psych Urgent Care · 300 68th St SE Bldg E</div>
+                <div style="font-size:.65rem;color:var(--slate-500);margin-top:.2rem;">Mon–Fri 10AM–8PM · Sat–Sun 10AM–2PM</div>
+                <div class="res-actions"><a href="tel:6164559200" class="btn-rcall">616-455-9200</a><a href="https://www.google.com/maps/search/?api=1&query=Pine+Rest+Urgent+Care+300+68th+Street+SE+Grand+Rapids" target="_blank" class="btn-rmap">📍</a></div>
+            </div>
+            <div class="res-card"><div class="res-name">Forest View</div><div class="res-type">Psych Hospital · 1055 Medical Park Dr · 24/7</div><div class="res-actions"><a href="tel:6169429610" class="btn-rcall">616-942-9610</a><a href="https://www.google.com/maps/search/?api=1&query=Forest+View+Hospital+Grand+Rapids" target="_blank" class="btn-rmap">📍</a></div></div>
+            <div class="res-card"><div class="res-name">Corewell / Butterworth ED</div><div class="res-type">General ED · 100 Michigan St NE · 24/7</div><div class="res-actions"><a href="tel:6167747444" class="btn-rcall">616-774-7444</a><a href="https://www.google.com/maps/search/?api=1&query=Corewell+Health+Butterworth+Grand+Rapids" target="_blank" class="btn-rmap">📍</a></div></div>
+            <div class="res-card"><div class="res-name">Trinity / St. Mary's ED</div><div class="res-type">General ED · 200 Jefferson Ave SE · 24/7</div><div class="res-actions"><a href="tel:6166855000" class="btn-rcall">616-685-5000</a><a href="https://www.google.com/maps/search/?api=1&query=Trinity+Health+Saint+Marys+Grand+Rapids" target="_blank" class="btn-rmap">📍</a></div></div>
+            <div class="res-card"><div class="res-name">Metro Health ED</div><div class="res-type">General ED · 5900 Byron Center Ave SW · 24/7</div><div class="res-actions"><a href="tel:6162522300" class="btn-rcall">616-252-2300</a><a href="https://www.google.com/maps/search/?api=1&query=Metro+Health+Hospital+Wyoming+Michigan" target="_blank" class="btn-rmap">📍</a></div></div>
+        </div>
+
+        <p style="font-size:.7rem;font-weight:700;color:var(--slate-400);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.75rem;">Non-Emergency / Wellness Checks</p>
         <div class="dir-grid">
-            <div class="res-card"><div class="res-name">Network 180</div><div class="res-type">Kent County CMH · 790 Fuller Ave NE</div><div class="res-actions"><a href="tel:6163363909" class="btn-rcall">616-336-3909</a><a href="https://www.google.com/maps/search/?api=1&query=Network+180+790+Fuller+Ave+NE+Grand+Rapids" target="_blank" class="btn-rmap">📍</a></div></div>
-            <div class="res-card"><div class="res-name">Pine Rest PUCC</div><div class="res-type">Psych Urgent Care · 300 68th St SE</div><div class="res-actions"><a href="tel:6164559200" class="btn-rcall">616-455-9200</a><a href="https://www.google.com/maps/search/?api=1&query=Pine+Rest+Urgent+Care+Grand+Rapids" target="_blank" class="btn-rmap">📍</a></div></div>
-            <div class="res-card"><div class="res-name">Forest View</div><div class="res-type">Psych Hospital · 1055 Medical Park Dr</div><div class="res-actions"><a href="tel:6169429610" class="btn-rcall">616-942-9610</a><a href="https://www.google.com/maps/search/?api=1&query=Forest+View+Hospital+Grand+Rapids" target="_blank" class="btn-rmap">📍</a></div></div>
-            <div class="res-card"><div class="res-name">Spectrum / Butterworth</div><div class="res-type">General ED · 100 Michigan St NE</div><div class="res-actions"><a href="tel:6167747444" class="btn-rcall">616-774-7444</a><a href="https://www.google.com/maps/search/?api=1&query=Spectrum+Health+Butterworth+Grand+Rapids" target="_blank" class="btn-rmap">📍</a></div></div>
-            <div class="res-card"><div class="res-name">Trinity (St. Mary's)</div><div class="res-type">General ED · 200 Jefferson Ave SE</div><div class="res-actions"><a href="tel:6166855000" class="btn-rcall">616-685-5000</a><a href="https://www.google.com/maps/search/?api=1&query=Trinity+Health+Saint+Marys+Grand+Rapids" target="_blank" class="btn-rmap">📍</a></div></div>
-            <div class="res-card dark"><div class="res-name">988 Lifeline</div><div class="res-type">National Crisis Line · 24/7</div><div class="res-actions"><a href="tel:988" class="btn-rcall">Call or Text 988</a></div></div>
+            <div class="res-card"><div class="res-name">GRPD Non-Emergency</div><div class="res-type">City of Grand Rapids clients</div><div class="res-actions"><a href="tel:6164563400" class="btn-rcall">616-456-3400</a></div></div>
+            <div class="res-card"><div class="res-name">Kent County Sheriff</div><div class="res-type">Outside city limits / county clients</div><div class="res-actions"><a href="tel:6166326100" class="btn-rcall">616-632-6100</a></div></div>
         </div>
     </div>
 </section>
@@ -677,12 +860,29 @@ function scenarioA() { return `
             </ul>
         </div>
 
+        <div class="callout-box purple">
+            <div class="callout-box-title">Therapeutic Considerations</div>
+            <p class="callout-box-text" style="margin-bottom:.6rem;">The therapeutic alliance is itself a protective factor. Research consistently shows that clients who feel connected to their therapist are less likely to act on suicidal thoughts. Maintaining the relationship through and after a crisis disclosure matters clinically — solo practice therapists should be cautious about defaulting too quickly to emergency systems in ways that feel like abandonment to the client.</p>
+            <p class="callout-box-text" style="margin-bottom:.6rem;"><strong>Avoid "no-harm contracts."</strong> Safety contracting is not evidence-based, is not a substitute for collaborative safety planning, and may create a false sense of security. Use a written safety plan instead — it should be written in the client's own language, short enough to be usable in a crisis, and reviewed at each relevant session.</p>
+            <p class="callout-box-text" style="margin-bottom:.6rem;"><strong>Plan for the period after disclosure.</strong> The window immediately after a client discloses suicidal thoughts is often the highest-risk period. A proactive, explicit touchpoint — a check-in call the next day, a scheduled brief telehealth contact, or even a simple caring message — has demonstrated positive outcomes and communicates that the therapeutic relationship extends beyond session walls.</p>
+            <p class="callout-box-text"><strong>Stay clinically involved.</strong> For actively suicidal clients at the moderate level, solo practice requires more personal clinical involvement — not less. Document your availability plan and ensure the client knows how to reach crisis resources if they cannot reach you after hours.</p>
+        </div>
+
+        <div class="callout-box blue">
+            <div class="callout-box-title">Michigan Legal Context — Suicide &amp; Confidentiality</div>
+            <p class="callout-box-text" style="margin-bottom:.6rem;"><strong>MCL 330.1946 (Duty to Warn)</strong> applies specifically to credible threats of violence against an identifiable <em>third party</em> — it does not create a statutory duty to warn in cases of suicide risk. For suicidal clients, your obligation to disclose arises from professional ethics and standard of care, not this statute.</p>
+            <p class="callout-box-text" style="margin-bottom:.6rem;"><strong>HIPAA's "serious and imminent threat" exception</strong> permits disclosure to prevent or lessen a serious and imminent threat to the health or safety of a person or the public — including the client themselves. This is permissive, not mandatory. Use the minimum necessary information and document the disclosure (recipient, discloser, date/time, nature of the emergency).</p>
+            <p class="callout-box-text">When in doubt, consult with a colleague or your licensing board's ethics line before disclosing. Document that you consulted and the guidance received.</p>
+        </div>
+
         <div class="ibox amber"><div class="ibox-icon-row"><div class="ibox-icon amber">📝</div><div><div class="ibox-ttl amber">Documentation Considerations</div><ul class="doc-list">
             <li>• Record specific ideation content reported by client (quotes when possible), C-SSRS items endorsed, and your clinical risk formulation including protective factors considered.</li>
-            <li>• Document safety plan review or development: what was covered, what changed, and whether the client demonstrated understanding.</li>
+            <li>• Document safety plan review or development: what was covered, what changed, and whether the client demonstrated understanding and retained a copy.</li>
             <li>• If means restriction was discussed, note client's response and any third-party verification performed (name, date, time, method).</li>
             <li>• Record the agreed-upon monitoring plan, including check-in frequency, escalation triggers, and named contacts.</li>
-            <li>• Document rationale for continuing outpatient care — why higher level of care was not indicated at this time.</li>
+            <li>• Document your clinical rationale for continuing outpatient care — not just what you decided, but why: what factors supported this decision and what would change it.</li>
+            <li>• Note whether a "no-harm contract" was used or intentionally avoided, and what was used in its place.</li>
+            <li>• If any disclosure was made (to emergency contact, law enforcement) without ROI, document the legal basis (HIPAA imminent danger exception), what was disclosed, to whom, and at what time.</li>
             <li>• If consultation was obtained: document the consultant's name, date/time, method of contact, and summary of clinical guidance received.</li>
         </ul></div></div></div>
     </div>
